@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "OpenPocket",
+    "slug": "openpocket",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "openpocket",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.arminayat.openpocket",
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "OpenPocket uses Bluetooth to connect to your Pocket recorder and download your recordings.",
+        "NSLocalNetworkUsageDescription": "OpenPocket connects directly to your Pocket recorder to download recordings over Wi-Fi."
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-web-browser",
+      "expo-font",
+      "expo-dev-client",
+      [
+        "react-native-ble-plx",
+        {
+          "isBackgroundEnabled": false
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "enableBackgroundPlayback": false
+        }
+      ],
+      "./plugins/with-pocket-wifi",
+      "expo-asset"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

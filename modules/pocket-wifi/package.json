@@ -1,0 +1,9 @@
+{
+  "name": "pocket-wifi",
+  "version": "0.1.0",
+  "description": "iOS hotspot connection and direct Pocket recording transfer for OpenPocket",
+  "main": "index.ts",
+  "license": "MIT",
+  "author": "OpenPocket contributors",
+  "private": true
+}
