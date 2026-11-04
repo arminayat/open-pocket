@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 
 export type WifiTransferResult = { bytesWritten: number; uri: string };
 export type WifiTransferProgress = { bytesWritten: number };
+export type VerifiedChatGPTIdentity = { subject: string; email: string | null };
 type EventSubscription = { remove(): void };
 
 type PocketWifiNative = {
@@ -11,6 +12,14 @@ type PocketWifiNative = {
   completeTransfer(expectedBytes: number): Promise<WifiTransferResult>;
   cancel(): Promise<void>;
   leave(ssid: string): Promise<void>;
+  startOAuthLoopback(): Promise<number>;
+  stopOAuthLoopback(): Promise<void>;
+  verifyChatGPTIdentity(
+    idToken: string,
+    jwksJson: string,
+    clientId: string,
+    nonce: string,
+  ): Promise<VerifiedChatGPTIdentity>;
   addListener(
     name: 'transferProgress',
     listener: (event: WifiTransferProgress) => void,
@@ -37,6 +46,26 @@ const PocketWifi = {
   leave: async (ssid: string) => requireNative().leave(ssid),
   addListener: (name: 'transferProgress', listener: (event: WifiTransferProgress) => void) =>
     requireNative().addListener(name, listener),
+};
+
+/** One-shot 127.0.0.1 relay that forwards Pocket's sign-in redirect to the app scheme. */
+export const PocketOAuthLoopback = {
+  start: async () => {
+    if (Platform.OS !== 'ios' || !native) {
+      throw new Error('Pocket sign-in needs the OpenPocket iPhone development build. Use an API key instead.');
+    }
+    return native.startOAuthLoopback();
+  },
+  stop: async () => { await native?.stopOAuthLoopback(); },
+};
+
+export const ChatGPTIdentity = {
+  verify: async (idToken: string, jwksJson: string, clientId: string, nonce: string) => {
+    if (Platform.OS !== 'ios' || !native || !native.verifyChatGPTIdentity) {
+      throw new Error('ChatGPT sign-in needs the latest OpenPocket iPhone development build.');
+    }
+    return native.verifyChatGPTIdentity(idToken, jwksJson, clientId, nonce);
+  },
 };
 
 export default PocketWifi;

@@ -8,7 +8,7 @@ export interface DiagnosticEntry {
 
 const ALLOWED_DETAILS = new Set([
   'transport', 'state', 'stage', 'source', 'firmware', 'wifiFirmware', 'status', 'httpStatus',
-  'permission', 'fileCount', 'durationSeconds', 'expectedBytes', 'receivedBytes', 'bytes', 'legacy',
+  'permission', 'fileCount', 'durationSeconds', 'expectedBytes', 'receivedBytes', 'bytes', 'legacy', 'withResponse',
   'attempt', 'retry', 'elapsedMs', 'deviceCount', 'platform', 'version', 'appVersion', 'count', 'verified',
   'reason', 'error', 'connected', 'recordings', 'recordingId', 'recording', 'availableBytes',
 ]);
@@ -34,7 +34,7 @@ export function createDiagnostics() {
       .replace(/\bPKT01[^\s,;"'}]*/gi, '[Pocket]')
       .replace(/(APP&SK&)[^\s,;"'}]+/gi, '$1[redacted]')
       .replace(/((?:session[_ -]?key|bind[_ -]?key|user[_ -]?id|uid|distinct_id|password|passphrase|access_token|refresh_token|client_secret|client_id|code_verifier|authorization|api[_ -]?key)["']?\s*[=:]\s*["']?)[^\s,;"'}]+/gi, '$1[redacted]')
-      .replace(/([?&](?:code|state|token|client_id|code_verifier)=)[^&#\s]+/gi, '$1[redacted]')
+      .replace(/([?&](?:code|state|nonce|token|id_token_hint|login_hint|ext_agent_host_id|client_id|code_verifier)=)[^&#\s]+/gi, '$1[redacted]')
       .replace(/\b[A-Za-z0-9_-]{16,}\b/g, '[identifier]')
       .slice(0, 1200);
   }
@@ -66,6 +66,10 @@ export function createDiagnostics() {
         message: redact(message), details: safeDetails(details),
       });
       entries = Object.freeze([...entries.slice(-199), entry]);
+      // Development builds mirror the already-redacted entry to the Metro console.
+      if (typeof __DEV__ !== 'undefined' && __DEV__) {
+        console.info(`[pocket] ${entry.stage}: ${entry.message}${entry.details ? ` ${JSON.stringify(entry.details)}` : ''}`);
+      }
       notify();
     },
     /** Returns cleanup for short-lived OAuth secrets; no secrets are serialized or logged. */

@@ -1,8 +1,10 @@
 import { AuthRequest, CodeChallengeMethod, ResponseType } from 'expo-auth-session';
+import { PocketOAuthLoopback } from '../../../modules/pocket-wifi';
 import * as WebBrowser from 'expo-web-browser';
 import { diagnostics, safeErrorMessage } from '../diagnostics';
+import { acquireOAuthSession } from '../oauth-session';
 import {
-  deriveCandidateKey, DISCOVERY_URL, MCP_URL, objectValue, OAUTH_REDIRECT_URI,
+  APP_CALLBACK_URI, deriveCandidateKey, DISCOVERY_URL, loopbackRedirectUri, MCP_URL, objectValue,
   parseOAuthMetadata, parseRegistration, registrationBody, validateAuthorizationResult,
 } from './helpers';
 import { PocketHttpError, readPocketAccount, requestJson } from './http';
@@ -15,7 +17,6 @@ export interface PocketAccountConnection {
   accountLabel: string;
 }
 
-let signingIn = false;
 const SIGN_IN_TIMEOUT_MS = 5 * 60_000;
 
 async function accountConnection(credential: string,
@@ -44,18 +45,18 @@ export async function connectWithApiKey(apiKey: string): Promise<PocketAccountCo
 }
 
 export async function signInToPocket(): Promise<PocketAccountConnection> {
-  if (signingIn) throw new Error('Pocket sign-in is already open. Finish or close it before trying again.');
-  signingIn = true;
+  const releaseSession = acquireOAuthSession();
   let token = '';
   let forgetEphemeral = () => {};
   try {
     diagnostics.log('account', 'Preparing Pocket account sign-in.');
     const metadata = parseOAuthMetadata(await requestJson(DISCOVERY_URL));
+    const redirectUri = loopbackRedirectUri(await PocketOAuthLoopback.start());
     let registered: unknown;
     try {
       registered = await requestJson(metadata.registrationEndpoint, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(registrationBody()),
+        body: JSON.stringify(registrationBody(redirectUri)),
       });
     } catch (error) {
       if (error instanceof PocketHttpError) {
@@ -63,20 +64,21 @@ export async function signInToPocket(): Promise<PocketAccountConnection> {
       }
       throw error;
     }
-    const clientId = parseRegistration(registered);
+    const clientId = parseRegistration(registered, redirectUri);
     const request = new AuthRequest({
-      clientId, redirectUri: OAUTH_REDIRECT_URI, responseType: ResponseType.Code,
+      clientId, redirectUri, responseType: ResponseType.Code,
       scopes: ['mcp:read'], usePKCE: true, codeChallengeMethod: CodeChallengeMethod.S256,
       extraParams: { resource: MCP_URL },
     });
-    await request.makeAuthUrlAsync(metadata);
+    const authUrl = await request.makeAuthUrlAsync(metadata);
     const cleanups = [diagnostics.registerSecret(clientId), diagnostics.registerSecret(request.state)];
     if (request.codeVerifier) cleanups.push(diagnostics.registerSecret(request.codeVerifier));
     forgetEphemeral = () => { for (const cleanup of cleanups) cleanup(); request.codeVerifier = undefined; };
     diagnostics.log('account', 'Opening Pocket’s secure sign-in page.');
     let timeout: ReturnType<typeof setTimeout> | undefined;
-    const result = await Promise.race([
-      request.promptAsync(metadata),
+    // The session watches the app scheme; the loopback relay forwards Pocket's redirect to it.
+    const session = await Promise.race([
+      WebBrowser.openAuthSessionAsync(authUrl, APP_CALLBACK_URI),
       new Promise<never>((_, reject) => {
         timeout = setTimeout(() => {
           try { WebBrowser.dismissAuthSession(); } catch { /* Native session may have already closed. */ }
@@ -84,8 +86,9 @@ export async function signInToPocket(): Promise<PocketAccountConnection> {
         }, SIGN_IN_TIMEOUT_MS);
       }),
     ]).finally(() => { if (timeout) clearTimeout(timeout); });
-    if (result.type === 'cancel' || result.type === 'dismiss') throw new Error('Pocket sign-in was cancelled.');
-    if (result.type !== 'success') throw new Error('Pocket sign-in could not complete. Try an API key or device key instead.');
+    if (session.type === 'cancel' || session.type === 'dismiss') throw new Error('Pocket sign-in was cancelled.');
+    const result = session.type === 'success' ? request.parseReturnUrl(session.url) : null;
+    if (result?.type !== 'success') throw new Error('Pocket sign-in could not complete. Try an API key or device key instead.');
     const code = validateAuthorizationResult(request.state, result.params);
     const forgetCode = diagnostics.registerSecret(code);
     try {
@@ -94,7 +97,7 @@ export async function signInToPocket(): Promise<PocketAccountConnection> {
         method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
           grant_type: 'authorization_code', client_id: clientId, code,
-          redirect_uri: OAUTH_REDIRECT_URI, code_verifier: request.codeVerifier, resource: MCP_URL,
+          redirect_uri: redirectUri, code_verifier: request.codeVerifier, resource: MCP_URL,
         }).toString(),
       }));
       if (!tokens || typeof tokens.access_token !== 'string' || !tokens.access_token ||
@@ -110,6 +113,8 @@ export async function signInToPocket(): Promise<PocketAccountConnection> {
     diagnostics.log('account', message);
     throw new Error(message);
   } finally {
-    token = ''; forgetEphemeral(); signingIn = false;
+    token = ''; forgetEphemeral();
+    await PocketOAuthLoopback.stop().catch(() => {});
+    releaseSession();
   }
 }

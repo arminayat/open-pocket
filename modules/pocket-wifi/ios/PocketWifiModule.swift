@@ -1,8 +1,10 @@
 import ExpoModulesCore
+import Foundation
 
 public final class PocketWifiModule: Module {
   private let hotspot = PocketHotspotConnection()
   private let transfer = PocketWifiTransfer()
+  private let oauthLoopback = PocketOAuthLoopback()
 
   public func definition() -> ModuleDefinition {
     Name("PocketWifi")
@@ -45,7 +47,36 @@ public final class PocketWifiModule: Module {
       self.hotspot.leave(ssid: ssid) { result in self.settle(promise, result: result) }
     }
 
+    AsyncFunction("startOAuthLoopback") { (promise: Promise) in
+      self.oauthLoopback.start { result in
+        switch result {
+        case .success(let port): promise.resolve(port)
+        case .failure(let error): promise.reject(error.code, error.message)
+        }
+      }
+    }
+
+    AsyncFunction("stopOAuthLoopback") { (promise: Promise) in
+      self.oauthLoopback.stop { promise.resolve() }
+    }
+
+    AsyncFunction("verifyChatGPTIdentity") {
+      (idToken: String, jwksJson: String, clientId: String, nonce: String, promise: Promise) in
+      do {
+        let identity = try ChatGPTIdentity.verify(
+          idToken: idToken, jwksJson: jwksJson, clientId: clientId, nonce: nonce
+        )
+        promise.resolve([
+          "subject": identity.subject,
+          "email": identity.email.map { $0 as Any } ?? NSNull(),
+        ] as [String: Any])
+      } catch {
+        promise.reject("E_CHATGPT_IDENTITY", "ChatGPT could not verify this sign-in. Please try again.")
+      }
+    }
+
     OnDestroy {
+      self.oauthLoopback.stop {}
       self.transfer.dispose()
       self.hotspot.dispose()
     }

@@ -13,16 +13,24 @@
     "check": "npm run typecheck && npm run lint && npm test && expo install --check",
     "export:ios": "expo export --platform ios",
     "ios:pods": "pod-install",
-    "test:wifi-native": "xcrun swiftc -module-cache-path /private/tmp/openpocket-swift-module-cache modules/pocket-wifi/ios/PocketStreamDecoder.swift modules/pocket-wifi/tests/StreamDecoderChecks.swift -o /private/tmp/openpocket-wifi-decoder-checks && /private/tmp/openpocket-wifi-decoder-checks"
+    "ios:testflight": "sh scripts/testflight.sh",
+    "icon": "xcrun swift scripts/app-icon.swift node_modules/@expo-google-fonts/instrument-serif/400Regular/InstrumentSerif_400Regular.ttf assets/images/icon.png",
+    "test:chatgpt-native": "xcrun swiftc -module-cache-path /private/tmp/openpocket-chatgpt-swift-module-cache modules/pocket-wifi/ios/ChatGPTIdentity.swift modules/pocket-wifi/tests/ChatGPTIdentityChecks.swift -o /private/tmp/openpocket-chatgpt-identity-checks && /private/tmp/openpocket-chatgpt-identity-checks",
+    "test:transcription-native": "xcrun swiftc -module-cache-path /private/tmp/openpocket-transcription-swift-cache modules/pocket-transcription/ios/TranscriptionUploadBody.swift modules/pocket-transcription/ios/TranscriptionUploadOperation.swift modules/pocket-transcription/tests/TranscriptionUploadChecks.swift -o /private/tmp/openpocket-transcription-checks && /private/tmp/openpocket-transcription-checks",
+    "test:wifi-native": "xcrun swiftc -module-cache-path /private/tmp/openpocket-swift-module-cache modules/pocket-wifi/ios/PocketStreamDecoder.swift modules/pocket-wifi/tests/StreamDecoderChecks.swift -o /private/tmp/openpocket-wifi-decoder-checks && /private/tmp/openpocket-wifi-decoder-checks && xcrun swiftc -module-cache-path /private/tmp/openpocket-swift-module-cache modules/pocket-wifi/ios/PocketStreamDecoder.swift modules/pocket-wifi/ios/PocketOAuthLoopback.swift modules/pocket-wifi/tests/OAuthLoopbackChecks.swift -o /private/tmp/openpocket-oauth-loopback-checks && /private/tmp/openpocket-oauth-loopback-checks",
+    "test:icloud-native": "xcrun swiftc -module-cache-path /private/tmp/openpocket-icloud-swift-cache modules/pocket-icloud/ios/ICloudPolicy.swift modules/pocket-icloud/tests/ICloudChecks.swift -o /private/tmp/openpocket-icloud-checks && /private/tmp/openpocket-icloud-checks"
   },
   "dependencies": {
+    "@expo-google-fonts/instrument-serif": "^0.4.1",
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo/vector-icons": "^15.1.1",
+    "@gorhom/bottom-sheet": "^5.2.14",
     "base64-js": "^1.5.1",
     "expo": "~57.0.20",
     "expo-asset": "~57.0.19",
     "expo-audio": "~57.0.5",
     "expo-auth-session": "~57.0.14",
+    "expo-clipboard": "~57.0.2",
     "expo-constants": "~57.0.17",
     "expo-crypto": "~57.0.2",
     "expo-dev-client": "~57.0.12",
@@ -47,6 +55,7 @@
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
     "react-native-ble-plx": "3.5.1",
+    "react-native-enriched-markdown": "1.1.1",
     "react-native-gesture-handler": "~2.32.0",
     "react-native-keyboard-controller": "1.21.9",
     "react-native-reanimated": "4.5.1",
@@ -62,6 +71,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
+    "@types/node": "^22.0.0",
     "@types/react": "~19.2.18",
     "babel-plugin-module-resolver": "^5.0.3",
     "babel-preset-expo": "~57.0.10",
@@ -75,9 +85,8 @@
     "pod-install": "1.1.0",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "typescript": "~6.0.3",
     "tsx": "^4.20.6",
-    "@types/node": "^22.0.0"
+    "typescript": "~6.0.3"
   },
   "overrides": {
     "xcode": {
@@ -88,5 +97,10 @@
     "node": "^22.13.0 || ^24.3.0 || >=26.0.0"
   },
   "packageManager": "npm@10.9.8",
-  "private": true
+  "private": true,
+  "enriched-markdown": {
+    "enableCodeHighlight": false,
+    "enableMath": false,
+    "enableVideo": false
+  }
 }

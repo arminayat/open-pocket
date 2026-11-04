@@ -1,6 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { PocketError, ResponseDecoder, parseRecording, parseResponse, positiveSize, TransferCounter, validateDeviceKey, validateDirectories, validateListing } from '../src/lib/pocket/protocol';
+import { PocketError, ResponseDecoder, parseRecording, parseResponse, positiveSize, recorderColor, TransferCounter, validateDeviceKey, validateDirectories, validateListing } from '../src/lib/pocket/protocol';
+
+test('recorder color comes from the name finish and falls back to grey', () => {
+  assert.equal(recorderColor('PKT01_GREY_DEMO1234'), 'grey');
+  assert.equal(recorderColor('PKT01_BLUE_DEMO1234'), 'blue');
+  assert.equal(recorderColor('pkt01_pink_demo1234'), 'pink');
+  assert.equal(recorderColor('PKT01_SIERRABLUE_DEMO'), 'blue');
+  assert.equal(recorderColor('Pocket'), 'grey');
+  assert.equal(recorderColor(undefined), 'grey');
+});
 
 test('metadata decoder retains fragmented prefixes and fields and splits concatenated replies', () => {
   const decoder = new ResponseDecoder();

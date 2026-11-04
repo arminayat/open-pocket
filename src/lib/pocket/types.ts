@@ -22,7 +22,7 @@ export interface Recording {
 export interface LocalRecording extends Recording {
   uri: string;
   bytes: number;
-  transport: Transport;
+  transport: Transport | 'icloud';
   downloadedAt: string;
 }
 

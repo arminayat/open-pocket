@@ -1,2 +1,2 @@
 import { Redirect } from 'expo-router';
-export default function OAuthCallback() { return <Redirect href="/(tabs)/device" />; }
+export default function OAuthCallback() { return <Redirect href="/(tabs)/settings" />; }

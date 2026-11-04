@@ -1,5 +1,6 @@
 export const MCP_URL = 'https://public.heypocketai.com/mcp';
-export const OAUTH_REDIRECT_URI = 'openpocket://oauth/callback';
+/** The auth session watches this scheme; Pocket itself redirects to the loopback relay. */
+export const APP_CALLBACK_URI = 'openpocket://oauth/callback';
 export const DISCOVERY_URL = 'https://public.heypocketai.com/.well-known/oauth-authorization-server';
 
 export interface PocketOAuthMetadata {
@@ -63,11 +64,19 @@ export function parseOAuthMetadata(value: unknown): PocketOAuthMetadata {
   };
 }
 
-export function registrationBody() {
+/** Pocket rejects custom schemes, so each sign-in registers the relay's loopback port. */
+export function loopbackRedirectUri(port: number): string {
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error('Sign-in could not prepare its return address. Please try again.');
+  }
+  return `http://127.0.0.1:${port}/callback`;
+}
+
+export function registrationBody(redirectUri: string) {
   return {
     client_name: 'OpenPocket',
     application_type: 'native',
-    redirect_uris: [OAUTH_REDIRECT_URI],
+    redirect_uris: [redirectUri],
     grant_types: ['authorization_code'],
     response_types: ['code'],
     token_endpoint_auth_method: 'none',
@@ -75,12 +84,12 @@ export function registrationBody() {
   };
 }
 
-export function parseRegistration(value: unknown): string {
+export function parseRegistration(value: unknown, redirectUri: string): string {
   const data = objectValue(value);
   if (!data || typeof data.client_id !== 'string' || !data.client_id ||
       data.client_id.length > 512 || data.client_secret ||
       (data.token_endpoint_auth_method && data.token_endpoint_auth_method !== 'none') ||
-      (Array.isArray(data.redirect_uris) && !data.redirect_uris.includes(OAUTH_REDIRECT_URI))) {
+      (Array.isArray(data.redirect_uris) && !data.redirect_uris.includes(redirectUri))) {
     throw new Error('Pocket did not accept this app’s native callback. Use an API key or device key instead.');
   }
   return data.client_id;

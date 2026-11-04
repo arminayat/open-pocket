@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { ConnectionGeneration } from '../src/lib/pocket/lifecycle';
+import { deadline } from '../src/lib/pocket/inbox';
+import { PocketError } from '../src/lib/pocket/protocol';
 
 type FakeDevice = { id: string; cancelConnection(): Promise<void> };
 function pendingConnection() {
@@ -48,4 +50,11 @@ test('discovery and queued work reject after their session is invalidated', () =
   lifecycle.assertCurrent(discovery);
   lifecycle.invalidate();
   assert.throws(() => lifecycle.assertCurrent(discovery), { code: 'disconnected' });
+});
+
+test('deadline rejects a native call that never settles and passes through settled results', async () => {
+  const stalled = deadline(new Promise<never>(() => {}), 10, () => new PocketError('stalled', 'stalled'));
+  await assert.rejects(stalled, (error: unknown) => error instanceof PocketError && error.code === 'stalled');
+  assert.equal(await deadline(Promise.resolve('ok'), 10, () => new Error('late')), 'ok');
+  await assert.rejects(deadline(Promise.reject(new Error('native')), 10, () => new Error('late')), /native/);
 });

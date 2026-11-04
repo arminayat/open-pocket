@@ -11,6 +11,7 @@ The wire format comes from [Pocket Libre's MIT-licensed protocol research](https
 - `completeTransfer(expectedBytes)`: supply the exact file length from BLE before sending `APP&U&WIFI`. Await this promise while starting the BLE switch. Resolve only after the exact MP3 byte count and ten-byte trailer arrive. The returned URI still points to `.part`; the caller promotes it after checking BLE completion.
 - `cancel()`: close the active socket, remove its partial file, and reject pending transfer promises. This does not leave the hotspot.
 - `leave(ssid)`: cancel a pending join to this SSID and remove its join-once configuration. iOS disassociates a join-once configuration when removed.
+- `PocketOAuthLoopback.start()` / `stop()`: opens a one-shot 127.0.0.1 listener returning its port; `GET /callback?<query>` is 302-forwarded to `openpocket://oauth/callback?<query>`. Other paths get 404.
 - `addListener('transferProgress', callback)`: payload is only `{ bytesWritten }`; recording bytes and credentials never cross the event bridge.
 
 Only one socket transfer is active. A stalled socket fails after 30 seconds without incoming bytes. Module destruction cancels the transfer and leaves its owned hotspot. Native errors use fixed descriptions that do not include SSIDs, passwords, file paths, or account identifiers.
@@ -28,3 +29,7 @@ xcrun swiftc -module-cache-path /private/tmp/openpocket-swift-module-cache \
   -o /private/tmp/openpocket-wifi-decoder-checks
 /private/tmp/openpocket-wifi-decoder-checks
 ```
+
+## ChatGPT identity verification
+
+`ChatGPTIdentity.verify` validates OpenAI ID tokens with Apple Security RS256 and trusted public JWKS, including issuer, audience, nonce, and time checks. The existing loopback callback is shared by Pocket and ChatGPT with a JavaScript sign-in lock. Run `npm run test:chatgpt-native` for synthetic signature/claim checks. New Swift sources require `npm run ios:pods` and a native app rebuild; compilation does not prove live ChatGPT sign-in.

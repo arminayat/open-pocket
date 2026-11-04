@@ -61,6 +61,14 @@ export function delay(ms: number, signal?: AbortSignal): Promise<void> {
   });
 }
 
+/** Rejects if a native call never settles, e.g. a CoreBluetooth write waiting on a ready signal. */
+export function deadline<T>(promise: Promise<T>, ms: number, error: () => Error): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(error()), ms);
+    promise.then(value => { clearTimeout(timer); resolve(value); }, cause => { clearTimeout(timer); reject(cause); });
+  });
+}
+
 export function abortable<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
   if (signal.aborted) return Promise.reject(cancelledError());
   return new Promise((resolve, reject) => {

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  deriveCandidateKey, parseAccountInfo, parseOAuthMetadata, parseRegistration, parseRpcResponse,
+  deriveCandidateKey, loopbackRedirectUri, parseAccountInfo, parseOAuthMetadata, parseRegistration, parseRpcResponse,
   registrationBody, validateAuthorizationResult, validateDeviceKey,
 } from '../src/lib/account/helpers';
 
@@ -66,11 +66,15 @@ test('OAuth requires S256 and public native registration on trusted HTTPS hosts'
     { token_endpoint: 'http://production.heypocketai.com/oauth/token' },
     { token_endpoint: 'https://user@production.heypocketai.com/oauth/token' },
   ]) assert.throws(() => parseOAuthMetadata({ ...metadata, ...changed }));
-  assert.deepEqual(registrationBody().redirect_uris, ['openpocket://oauth/callback']);
-  assert.equal(registrationBody().token_endpoint_auth_method, 'none');
-  assert.equal(parseRegistration({ client_id: 'synthetic-client', redirect_uris: registrationBody().redirect_uris }), 'synthetic-client');
-  assert.throws(() => parseRegistration({ client_id: 'synthetic-client', client_secret: 'must-not-use' }));
-  assert.throws(() => parseRegistration({ client_id: 'synthetic-client', redirect_uris: ['https://example.test'] }));
+  // Pocket rejects custom-scheme redirects; registration must use the loopback relay.
+  const redirectUri = loopbackRedirectUri(53817);
+  assert.equal(redirectUri, 'http://127.0.0.1:53817/callback');
+  for (const port of [0, -1, 65536, 1.5, Number.NaN]) assert.throws(() => loopbackRedirectUri(port));
+  assert.deepEqual(registrationBody(redirectUri).redirect_uris, [redirectUri]);
+  assert.equal(registrationBody(redirectUri).token_endpoint_auth_method, 'none');
+  assert.equal(parseRegistration({ client_id: 'synthetic-client', redirect_uris: [redirectUri] }, redirectUri), 'synthetic-client');
+  assert.throws(() => parseRegistration({ client_id: 'synthetic-client', client_secret: 'must-not-use' }, redirectUri));
+  assert.throws(() => parseRegistration({ client_id: 'synthetic-client', redirect_uris: ['https://example.test'] }, redirectUri));
 });
 
 test('authorization callback fails closed when state is missing or mismatched', () => {

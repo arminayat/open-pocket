@@ -2,12 +2,13 @@ import { useState, useSyncExternalStore } from 'react';
 import { View } from 'react-native';
 import { Button, Card } from 'heroui-native';
 import { File, Paths } from 'expo-file-system';
+import { Stack } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import { AppText, Screen } from '@/components/screen';
 import { diagnostics, safeErrorMessage } from '@/lib/diagnostics';
 import { usePocket } from '@/contexts/pocket-context';
 
-export default function DiagnosticsScreen() {
+export default function DebugScreen() {
   const entries = useSyncExternalStore(diagnostics.subscribe, diagnostics.getSnapshot);
   const { info, busy } = usePocket();
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +21,8 @@ export default function DiagnosticsScreen() {
     } catch (cause) { setError(safeErrorMessage(cause)); }
   };
   return (
-    <Screen title="Diagnostics" subtitle="See which part of the connection needs attention.">
+    <Screen subtitle="See which part of the connection needs attention.">
+      <Stack.Screen options={{ title: 'Debug' }} />
       <Card><Card.Body className="gap-3">
         <Card.Title>{busy ? `Working: ${busy}` : 'Ready for a test'}</Card.Title>
         <Card.Description>Reports include connection stages and transfer counts. Account identifiers, device identifiers, keys, and passwords are removed.</Card.Description>

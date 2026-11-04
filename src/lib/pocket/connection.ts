@@ -1,6 +1,6 @@
 import { BleManager, State, type Characteristic, type Device, type Subscription } from 'react-native-ble-plx';
 import { fromByteArray, toByteArray } from 'base64-js';
-import { ResponseInbox } from './inbox';
+import { deadline, ResponseInbox } from './inbox';
 import { ConnectionGeneration } from './lifecycle';
 import { disconnectedError, LEGACY, PocketError, PRIMARY, ResponseDecoder } from './protocol';
 import type { DiagnosticLogger, PocketDevice } from './types';
@@ -91,8 +91,10 @@ export class PocketConnection {
     const generation = this.lifecycle.invalidate();
     this.stopScan();
     try {
+      this.log('connect', 'Releasing any previous Bluetooth connection.');
       await this.releaseConnection();
       this.lifecycle.assertCurrent(generation);
+      this.log('connect', 'Waiting for Bluetooth to be ready.');
       await this.poweredOn();
       this.lifecycle.assertCurrent(generation);
       const inbox = new ResponseInbox();
@@ -102,6 +104,7 @@ export class PocketConnection {
       this.device = device;
       this.connected = true;
       this.disconnectSubscription = device.onDisconnected(() => { if (this.lifecycle.current(generation)) this.lost(); });
+      this.log('connect', 'Bluetooth link open. Discovering Pocket services.');
       device = await device.discoverAllServicesAndCharacteristics();
       this.lifecycle.assertCurrent(generation);
       this.device = device;
@@ -147,8 +150,10 @@ export class PocketConnection {
       const audioReader = audio.find(c => c.uuid.toLowerCase() === candidate.audio && (c.isNotifiable || c.isIndicatable));
       if (writer && reader && audioReader) {
         this.channel = candidate;
-        this.withoutResponse = writer.isWritableWithoutResponse;
-        this.log('services', 'Found supported Pocket control and audio services.', { legacy: candidate === LEGACY });
+        // Acknowledged writes don't depend on CoreBluetooth's write-without-response ready
+        // signal, which can stay false and leave unacknowledged writes pending forever.
+        this.withoutResponse = writer.isWritableWithoutResponse && !writer.isWritableWithResponse;
+        this.log('services', 'Found supported Pocket control and audio services.', { legacy: candidate === LEGACY, withResponse: !this.withoutResponse });
         return;
       }
     }
@@ -161,8 +166,10 @@ export class PocketConnection {
       if (!this.connected || !this.device) throw disconnectedError();
       const mark = this.inbox.mark();
       const value = fromByteArray(Uint8Array.from(`APP&${command}`, c => c.charCodeAt(0)));
-      if (this.withoutResponse) await this.device.writeCharacteristicWithoutResponseForService(this.channel.service, this.channel.write, value);
-      else await this.device.writeCharacteristicWithResponseForService(this.channel.service, this.channel.write, value);
+      const write = this.withoutResponse
+        ? this.device.writeCharacteristicWithoutResponseForService(this.channel.service, this.channel.write, value)
+        : this.device.writeCharacteristicWithResponseForService(this.channel.service, this.channel.write, value);
+      await deadline(write, 5000, () => new PocketError('stalled', 'Pocket stopped accepting commands. Wake it, close the official app, and reconnect.'));
       this.lifecycle.assertCurrent(generation);
       return mark;
     };

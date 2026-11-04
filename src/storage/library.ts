@@ -1,9 +1,12 @@
 import { Directory, File, Paths, type FileHandle } from 'expo-file-system';
 import type { DownloadTarget, LocalRecording, Recording, Transport } from '@/lib/pocket/types';
-import { indexRecording } from './library-index';
+import { parseManifest } from '@/lib/icloud/archive';
+import type { RecordingManifest } from '@/lib/icloud/types';
+import { createIndexPublicationQueue, indexRecording } from './library-index';
 import { publishIndexSnapshot, readIndexSnapshot, type IndexStorage } from './index-snapshots';
 
 const directory = () => new Directory(Paths.document, 'recordings');
+const publishLibrary = createIndexPublicationQueue();
 const indexStorage = (folder: Directory): IndexStorage => ({
   list: () => folder.list().filter((entry): entry is File => entry instanceof File).map(entry => entry.name),
   read: name => new File(folder, name).text(),
@@ -56,22 +59,24 @@ export function createDownloadTarget(recording: Recording, transport: Transport)
         throw new Error('The downloaded recording is incomplete. Try downloading it again.');
       }
       // Read the index without startup cleanup: another .part is never removed during a transfer.
-      const storage = indexStorage(folder);
-      const previous = await readIndexSnapshot(storage);
-      // No await after this check: publication is the terminal completion boundary.
-      if ((phase as string) === 'aborted') throw new Error('Download cancelled.');
-      const file = new File(folder, `${stem}.mp3`);
-      part.move(file);
-      const local: LocalRecording = { ...recording, uri: file.uri, bytes: expectedBytes, transport, downloadedAt: new Date().toISOString() };
-      const replaced = previous.filter(item => item.id === recording.id && item.transport === transport);
-      const next = [indexRecording(local, file.name), ...previous.filter(item => item.id !== recording.id || item.transport !== transport)];
-      try { publishIndexSnapshot(storage, next); }
-      catch (error) { file.delete(); throw error; }
-      phase = 'complete';
-      for (const old of replaced) {
-        try { const oldFile = new File(folder, old.filename); if (oldFile.exists) oldFile.delete(); } catch { /* orphan is harmless */ }
-      }
-      return local;
+      return publishLibrary(async () => {
+        const storage = indexStorage(folder);
+        const previous = await readIndexSnapshot(storage);
+        // No await after this check: publication is the terminal completion boundary.
+        if ((phase as string) === 'aborted') throw new Error('Download cancelled.');
+        const file = new File(folder, `${stem}.mp3`);
+        part.move(file);
+        const local: LocalRecording = { ...recording, uri: file.uri, bytes: expectedBytes, transport, downloadedAt: new Date().toISOString() };
+        const replaced = previous.filter(item => item.id === recording.id && item.transport === transport);
+        const next = [indexRecording(local, file.name), ...previous.filter(item => item.id !== recording.id || item.transport !== transport)];
+        try { publishIndexSnapshot(storage, next); }
+        catch (error) { file.delete(); throw error; }
+        phase = 'complete';
+        for (const old of replaced) {
+          try { const oldFile = new File(folder, old.filename); if (oldFile.exists) oldFile.delete(); } catch { /* orphan is harmless */ }
+        }
+        return local;
+      });
     },
     abort() {
       if (phase === 'complete' || phase === 'aborted') return;
@@ -80,4 +85,32 @@ export function createDownloadTarget(recording: Recording, transport: Transport)
       if (part.exists) part.delete();
     },
   };
+}
+
+/** The native importer verifies SHA-256 before returning this fixed local audio path. */
+export function adoptCloudRecording(value: RecordingManifest, uri: string): Promise<LocalRecording> {
+  return publishLibrary(async () => {
+    const manifest = parseManifest(JSON.stringify(value));
+    const folder = directory();
+    const file = new File(folder, `icloud_${manifest.sha256}.mp3`);
+    if (uri !== file.uri || !file.exists || file.size !== manifest.bytes) {
+      throw new Error('The downloaded iCloud audio is missing or has changed. Try syncing again.');
+    }
+    const storage = indexStorage(folder);
+    const previous = await readIndexSnapshot(storage);
+    const existing = previous.find(item => item.filename === file.name && item.id === manifest.id);
+    if (existing) {
+      if (existing.bytes !== manifest.bytes || existing.date !== manifest.date || existing.timestamp !== manifest.timestamp
+        || existing.durationSeconds !== manifest.durationSeconds) throw new Error('The saved recording conflicts with its iCloud metadata.');
+      const { filename: _filename, ...metadata } = existing;
+      return { ...metadata, uri: file.uri };
+    }
+    const local: LocalRecording = {
+      id: manifest.id, date: manifest.date, timestamp: manifest.timestamp, durationSeconds: manifest.durationSeconds,
+      uri: file.uri, bytes: manifest.bytes, transport: 'icloud', downloadedAt: new Date().toISOString(),
+    };
+    // Keep the verified file on a failed publication so the next sync can adopt it without another download.
+    publishIndexSnapshot(storage, [indexRecording(local, file.name), ...previous]);
+    return local;
+  });
 }

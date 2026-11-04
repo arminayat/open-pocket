@@ -17,6 +17,9 @@ export function createPocketClient(log: DiagnosticLogger): PocketClient {
     busy = true;
     try { return await operation(); } finally { busy = false; }
   };
+  // Optional info requests may go unanswered, but a stalled write means the link is unusable.
+  const optional = (request: Promise<string>, fallback: string) =>
+    request.catch(error => { if (error instanceof PocketError && error.code === 'stalled') throw error; return fallback; });
   const requireConnection = () => { if (!authenticated || !connection.isConnected()) throw disconnectedError(); };
   return {
     scan: callback => connection.scan(callback),
@@ -32,10 +35,10 @@ export function createPocketClient(log: DiagnosticLogger): PocketClient {
         if (result !== 'OK') throw new PocketError('authentication', 'Pocket rejected this key. Use the account that activated this recorder, or provide its existing device key.');
         authenticated = true;
         log('authenticated', 'Pocket acknowledged authentication.');
-        const batteryValue = await connection.request('BAT', 'BAT', 5000).catch(() => '');
+        const batteryValue = await optional(connection.request('BAT', 'BAT', 5000), '');
         const battery = /^\d+$/.test(batteryValue) && Number(batteryValue) <= 100 ? Number(batteryValue) : null;
-        const firmware = await connection.request('FW', 'FW', 5000).catch(() => 'unknown');
-        const wifiFirmware = await connection.request('WF', 'WF', 5000).catch(() => 'unknown');
+        const firmware = await optional(connection.request('FW', 'FW', 5000), 'unknown');
+        const wifiFirmware = await optional(connection.request('WF', 'WF', 5000), 'unknown');
         requireConnection();
         // Report firmware only if it resembles a version, never arbitrary responses.
         log('device-info', 'Read recorder information.', { battery, firmware: /^[A-Za-z0-9.-]{1,32}$/.test(firmware) ? firmware : 'unknown', wifiFirmware: /^[A-Za-z0-9.-]{1,32}$/.test(wifiFirmware) ? wifiFirmware : 'unknown' });

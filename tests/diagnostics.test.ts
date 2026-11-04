@@ -58,3 +58,9 @@ test('secrets discovered later redact existing messages and short-lived registra
   assert.equal(diagnostics.redact('short-secret'), 'short-secret');
   assert.ok(!diagnostics.exportReport().includes('short-secret'));
 });
+
+test('ChatGPT authorization hints and host identifiers are redacted even without registration', () => {
+  const log = createDiagnostics();
+  const text = log.redact('https://auth.openai.com/api/accounts/authorize?id_token_hint=short%2Esecret&login_hint=name%40example.com&ext_agent_host_id=urn%3Auuid%3Aprivate&nonce=short-nonce&code=one-use');
+  for (const secret of ['short%2Esecret', 'name%40example.com', 'urn%3Auuid%3Aprivate', 'short-nonce', 'one-use']) assert.ok(!text.includes(secret));
+});

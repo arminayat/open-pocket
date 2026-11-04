@@ -1,0 +1,9 @@
+{
+  "name": "pocket-icloud",
+  "version": "0.1.0",
+  "description": "Account-bound iCloud Documents sync for OpenPocket",
+  "main": "index.ts",
+  "license": "MIT",
+  "author": "OpenPocket contributors",
+  "private": true
+}

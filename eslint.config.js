@@ -6,7 +6,7 @@ const reactNativePlugin = require('eslint-plugin-react-native');
 module.exports = defineConfig([
   expoConfig,
   {
-    ignores: ['dist/*'],
+    ignores: ['dist/*', '.expo/*'],
   },
   {
     plugins: {

@@ -1,16 +1,13 @@
-import { Button, Card } from 'heroui-native';
+import { useEffect } from 'react';
+import { Alert } from 'react-native';
 import { usePocket } from '@/contexts/pocket-context';
 
-export function ErrorNotice() {
+/** Shows Pocket errors as one native alert; mounted once at the root so tabs don't duplicate it. */
+export function ErrorAlert() {
   const { error, clearError } = usePocket();
-  if (!error) return null;
-  return (
-    <Card className="bg-danger-soft" accessibilityLiveRegion="polite">
-      <Card.Body className="gap-2">
-        <Card.Title>Connection needs attention</Card.Title>
-        <Card.Description>{error}</Card.Description>
-        <Button variant="ghost" size="sm" onPress={clearError}>Dismiss</Button>
-      </Card.Body>
-    </Card>
-  );
+  useEffect(() => {
+    if (!error) return;
+    Alert.alert('Connection needs attention', error, [{ text: 'OK', onPress: clearError }], { cancelable: false });
+  }, [error, clearError]);
+  return null;
 }

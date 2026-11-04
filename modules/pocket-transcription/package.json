@@ -1,0 +1,9 @@
+{
+  "name": "pocket-transcription",
+  "version": "0.1.0",
+  "description": "Bounded disk-based iOS transcription uploads for OpenPocket",
+  "main": "index.ts",
+  "license": "MIT",
+  "author": "OpenPocket contributors",
+  "private": true
+}

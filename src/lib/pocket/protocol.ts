@@ -130,3 +130,11 @@ export class TransferCounter {
     if (!Number.isSafeInteger(this.bytes) || (this.expected !== null && this.bytes > this.expected)) throw new PocketError('transfer', 'Recording exceeded its reported size. Reconnect and retry.');
   }
 }
+
+export type RecorderColor = 'grey' | 'blue' | 'pink';
+
+/** Recorder names carry the finish (`PKT01_GREY_…`); only GREY is confirmed, BLUE and PINK follow the sold finishes. */
+export function recorderColor(name: string | undefined): RecorderColor {
+  const finish = name?.split('_')[1]?.toUpperCase() ?? '';
+  return finish.includes('BLUE') ? 'blue' : finish.includes('PINK') ? 'pink' : 'grey';
+}

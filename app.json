@@ -9,11 +9,16 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.arminayat.openpocket",
+      "bundleIdentifier": "com.nestorcodecrafters.openpocket",
       "infoPlist": {
         "NSBluetoothAlwaysUsageDescription": "OpenPocket uses Bluetooth to connect to your Pocket recorder and download your recordings.",
         "NSLocalNetworkUsageDescription": "OpenPocket connects directly to your Pocket recorder to download recordings over Wi-Fi."
-      }
+      },
+      "buildNumber": "4",
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "appleTeamId": "G6WL4CPNV3"
     },
     "plugins": [
       "expo-router",
@@ -24,7 +29,10 @@
       [
         "react-native-ble-plx",
         {
-          "isBackgroundEnabled": false
+          "isBackgroundEnabled": true,
+          "modes": [
+            "central"
+          ]
         }
       ],
       [
@@ -36,7 +44,10 @@
         }
       ],
       "./plugins/with-pocket-wifi",
-      "expo-asset"
+      "./plugins/with-ble-write-ready",
+      "expo-asset",
+      "./plugins/with-icloud",
+      "./plugins/with-scene-lifecycle"
     ],
     "experiments": {
       "typedRoutes": true,
