@@ -37,9 +37,9 @@ For subsequent JavaScript changes:
 npm start
 ```
 
-### Private TestFlight build
+### TestFlight build
 
-`npm run ios:testflight` prebuilds, archives a Release build, and uploads it to App Store Connect as an **internal-only** TestFlight build: it can go only to the team's own App Store Connect users, never to external testers or the App Store. Signing and upload use the Apple account signed in to Xcode (team from `app.json`). The App Store Connect app record for `com.nestorcodecrafters.openpocket` must exist, and `expo.ios.buildNumber` in `app.json` must be raised before every upload. After Apple finishes processing, add yourself to an internal testing group and install from the TestFlight app.
+`npm run ios:testflight` prebuilds, archives a Release build, and uploads it to App Store Connect with external TestFlight eligibility. Signing and upload use the Apple account signed in to Xcode (team from `app.json`). The App Store Connect app record for `com.nestorcodecrafters.openpocket` must exist, and `expo.ios.buildNumber` in `app.json` must be raised before every upload. Archives and export options are saved under `build/testflight/build-<number>`. After Apple finishes processing, add the build to an external testing group, complete Test Information and Beta App Review details, and submit it for Beta App Review. Enable the group's public link to let testers join; availability depends on Apple approval. Uploading does not publish the app to the App Store. The earlier build 4 was uploaded as internal-only and cannot be used for external testing.
 
 Use the installed development build. Expo Go cannot run the BLE or local Wi-Fi module. Rebuild after native dependency, module, or config-plugin changes. No backend, environment secrets, or database migrations are required.
 

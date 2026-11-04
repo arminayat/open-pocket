@@ -1,11 +1,13 @@
 #!/bin/sh
-# Archives a Release build and uploads it to App Store Connect as an internal-only
-# TestFlight build. Signing and upload use the Apple account signed in to Xcode.
+# Archives a Release build and uploads it to App Store Connect for TestFlight.
+# External testing still requires Beta App Review and an external testing group.
+# Signing and upload use the Apple account signed in to Xcode.
 # Raise expo.ios.buildNumber in app.json before each upload.
 set -eu
 cd "$(dirname "$0")/.."
 
-out=ios/build/testflight
+build=$(node -p "require('./app.json').expo.ios.buildNumber")
+out="build/testflight/build-$build"
 team=$(node -p "require('./app.json').expo.ios.appleTeamId")
 
 LANG=en_US.UTF-8 npx expo prebuild --platform ios
@@ -20,7 +22,7 @@ cat > "$out/ExportOptions.plist" <<EOF
   <key>destination</key><string>upload</string>
   <key>teamID</key><string>$team</string>
   <key>signingStyle</key><string>automatic</string>
-  <key>testFlightInternalTestingOnly</key><true/>
+  <key>testFlightInternalTestingOnly</key><false/>
   <key>manageAppVersionAndBuildNumber</key><false/>
   <key>uploadSymbols</key><true/>
 </dict>

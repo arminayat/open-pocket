@@ -16,7 +16,7 @@
 - `modules/pocket-icloud`: native iCloud availability/session handling, document discovery, coordinated streaming/publication, path/hash policy, and synthetic Swift checks.
 - `docs/research`: dated source-backed provider comparisons; implementation truth stays in code and these agent notes.
 - `plugins`: durable Expo native configuration, iCloud container entitlements/Files visibility, and pod source patches.
-- `scripts`: release tooling (`testflight.sh`: internal-only TestFlight archive and upload; `app-icon.swift`: renders `assets/images/icon.png` via `npm run icon`).
+- `scripts`: release tooling (`testflight.sh`: TestFlight archive and upload with external-testing eligibility, saved per build under ignored `build/testflight/build-<number>`; `app-icon.swift`: renders `assets/images/icon.png` via `npm run icon`).
 - `tests`: synthetic protocol, cancellation, account, diagnostic, notes, and iCloud reconciliation/consent/import checks.
 
 Keep files below roughly 500 lines. Generated native directories, dependencies, exports, and caches are ignored.
