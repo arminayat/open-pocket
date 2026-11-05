@@ -14,6 +14,7 @@
 - `modules/pocket-wifi`: Swift hotspot/socket/decoder, OAuth relay, ChatGPT ID-token verifier, and wrapper.
 - `modules/pocket-transcription`: independent native disk-streamed HTTPS uploader; no recorder transport responsibilities.
 - `modules/pocket-icloud`: native iCloud availability/session handling, document discovery, coordinated streaming/publication, path/hash policy, and synthetic Swift checks.
+- `docs/testflight.md`: external beta submission status and operating notes. `docs/public-beta.md` and `docs/privacy.md` are the source copies of public GitHub Gist documents used by App Store Connect; publishing those files is separate from pushing this private repository.
 - `docs/research`: dated source-backed provider comparisons; implementation truth stays in code and these agent notes.
 - `plugins`: durable Expo native configuration, iCloud container entitlements/Files visibility, and pod source patches.
 - `scripts`: release tooling (`testflight.sh`: TestFlight archive and upload with external-testing eligibility, saved per build under ignored `build/testflight/build-<number>`; `app-icon.swift`: renders `assets/images/icon.png` via `npm run icon`).
