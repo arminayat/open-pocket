@@ -24,3 +24,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+# libASPL
+
+`driver/third_party/libASPL` is vendored unmodified from https://github.com/gavv/libASPL
+(commit 633e0f70203edd87d320fc5a3cae901e1363aac5) under the MIT License; see
+`driver/third_party/libASPL/LICENSE`. Copyright (c) Victor Gaydov and contributors.
+
+# Instrument Serif
+
+`mac/Resources/Fonts/InstrumentSerif-Regular.ttf` is from https://github.com/google/fonts
+(ofl/instrumentserif), Copyright 2022 The Instrument Serif Project Authors, under the
+SIL Open Font License 1.1; see `mac/Resources/Fonts/OFL.txt`.

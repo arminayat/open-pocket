@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "heypocket"
+version = "0.1.0"
+description = "Use a HeyPocket recorder as a Bluetooth microphone on macOS"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = ["bleak>=0.22,<2"]
+
+[project.scripts]
+pocket = "pocket.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

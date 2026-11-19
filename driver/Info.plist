@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AudioServerPlugIn_MachServices</key>
+	<array/>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>PocketMic</string>
+	<key>CFBundleIdentifier</key>
+	<string>io.github.heypocket.PocketMic</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Pocket Mic</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>CFPlugInFactories</key>
+	<dict>
+		<key>6763BBAD-968E-42A8-BBF4-3C89233CA024</key>
+		<string>PocketMicEntryPoint</string>
+	</dict>
+	<key>CFPlugInTypes</key>
+	<dict>
+		<key>443ABAB8-E7B3-491A-B985-BEB9187030DB</key>
+		<array>
+			<string>6763BBAD-968E-42A8-BBF4-3C89233CA024</string>
+		</array>
+	</dict>
+	<key>NSHumanReadableCopyright</key>
+	<string>MIT License</string>
+	<key>NSPrincipalClass</key>
+	<string></string>
+	<key>sandboxSafe</key>
+	<true/>
+</dict>
+</plist>

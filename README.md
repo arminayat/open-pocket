@@ -19,6 +19,22 @@ An iPhone MVP for direct access to an already-activated Pocket recorder. Built f
 
 Account-derived device authentication is experimental. OAuth callback support, identity equivalence, and firmware behavior must be confirmed with a physical recorder. The official app is still required for first activation.
 
+## OpenPocket for Mac
+
+[`mac/`](mac) is a native macOS app with a window and a menu-bar icon. It has
+two features:
+
+- **Dictate:** press the Pocket's button, talk, press again, and your hotkey
+  dictation app (OpenWhispr, Wispr Flow, …) types it. OpenPocket routes the
+  Pocket's live audio through **Pocket Mic**, a virtual microphone in
+  [`driver/`](driver) built on MIT-licensed libASPL.
+- **Gestures:** taps and swipes on the Pocket's back, picked up by its contact
+  mic, trigger actions you choose. A guided calibration teaches it your taps.
+
+[`cli/`](cli) is the `pocket` Python command it grew from. Build with
+`mac/build-app.sh`; details in [mac/README.md](mac/README.md). It isn't signed
+by the OpenPocket team yet, so iCloud Recordings isn't connected on the Mac.
+
 ## Run on your iPhone
 
 Requires Node 22.13+ (see `.nvmrc`), npm, Xcode, CocoaPods, and Apple development signing. Enable Developer Mode on the iPhone.

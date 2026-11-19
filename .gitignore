@@ -44,3 +44,11 @@ app-example-src
 /ios/
 /android/
 /build/
+
+# OpenPocket for Mac, Pocket Mic driver, pocket CLI
+/mac/.build/
+/mac/build/
+/driver/build/
+/cli/.venv/
+__pycache__/
+*.egg-info/
