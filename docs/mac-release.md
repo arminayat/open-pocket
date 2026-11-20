@@ -62,6 +62,14 @@ The iPhone app has its own TestFlight script and notes ([testflight.md](testflig
 `mac/release.sh --check` does everything except notarization. Its app is blocked by Gatekeeper on
 other Macs.
 
+## Status
+
+2026-11-20: `mac/testflight.sh` uploaded **OpenPocket 0.1.0 (202611202203)** for macOS to the App
+Store Connect app (`Uploaded OpenPocket`, `EXPORT SUCCEEDED`; the only warnings were missing dSYMs,
+which don't block processing). Apple's processing result, test groups and Beta App Review were not
+checked: there's no App Store Connect access from the command line here. `mac/release.sh` made a
+notarized 0.1.0 zip (build 202611202205) that Gatekeeper accepts; it isn't published.
+
 ## Not yet verified
 
 - In the TestFlight build: posting the dictation hotkey and media keys from the sandbox (CGEvent
