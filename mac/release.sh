@@ -1,12 +1,10 @@
 #!/bin/bash
 # Builds OpenPocket for Mac for Apple silicon and Intel, signs it with the team's Developer ID,
 # has Apple notarize it through the account Xcode is signed in to (no password or API key to
-# set up), staples the ticket, and puts the app in a signed disk image. docs/mac-release.md has
-# the rest.
+# set up), staples the ticket, and zips it. docs/mac-release.md has the rest.
 #
 # Usage: mac/release.sh [--check]
-#   --check  build and sign the app and the disk image, but don't notarize (the working tree may
-#            be dirty)
+#   --check  build, sign and zip the app, but don't notarize (the working tree may be dirty)
 #
 #   TEAM_ID  the Apple team; G6WL4CPNV3 (Nestor Code Crafters) by default
 set -euo pipefail
@@ -20,7 +18,7 @@ version=$(plutil -extract CFBundleShortVersionString raw -o - Info.plist)
 build=$(date -u +%Y%m%d%H%M)
 out="build/release"
 archive="$out/OpenPocket.xcarchive"
-dmg="$out/OpenPocket-$version.dmg"
+zip="$out/OpenPocket-$version.zip"
 
 fail() { echo "$1" >&2; exit 1; }
 
@@ -105,14 +103,10 @@ EOF
   spctl --assess --type execute --verbose=2 "$app"
 fi
 
-stage="$out/dmg"
-mkdir -p "$stage"
-ditto "$app" "$stage/OpenPocket.app"
-ln -s /Applications "$stage/Applications"
-hdiutil create -quiet -volname "OpenPocket" -srcfolder "$stage" -fs HFS+ -format UDZO -ov "$dmg"
-rm -rf "$stage"
-codesign --sign "$identity" --timestamp "$dmg"
-(cd "$out" && shasum -a 256 "$(basename "$dmg")" > "$(basename "$dmg").sha256")
-echo "Done: mac/$dmg"
+# A zip, not a disk image: xcodebuild notarizes apps only, and Gatekeeper rejects a downloaded
+# disk image that isn't notarized itself. The stapled ticket travels inside the zipped app.
+ditto -c -k --keepParent "$app" "$zip"
+(cd "$out" && shasum -a 256 "$(basename "$zip")" > "$(basename "$zip").sha256")
+echo "Done: mac/$zip"
 $check && echo "Not notarized (--check): Gatekeeper will block it on other Macs."
 exit 0

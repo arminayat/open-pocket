@@ -48,7 +48,7 @@ open mac/build/OpenPocket.app
 
 `SIGN_IDENTITY`, `UNIVERSAL=1` and `BUILD_NUMBER` change how it signs and
 builds; `mac/release.sh` uses them to make a Developer ID–signed, notarized
-disk image ([../docs/mac-release.md](../docs/mac-release.md)). The app icon is
+zip ([../docs/mac-release.md](../docs/mac-release.md)). The app icon is
 `Resources/AppIcon.icns`, made from the iPhone icon by
 `xcrun swift mac/make-icon.swift assets/images/icon.png mac/Resources/AppIcon.icns`.
 
