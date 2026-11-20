@@ -9,6 +9,7 @@
 #   TEAM_ID  the Apple team; G6WL4CPNV3 (Nestor Code Crafters) by default
 set -euo pipefail
 cd "$(dirname "$0")"
+. ./xcode-export.sh
 
 check=false
 [[ "${1:-}" == --check ]] && check=true
@@ -17,7 +18,6 @@ version=$(plutil -extract CFBundleShortVersionString raw -o - Info.plist)
 # Each build gets a larger number than the last; the time gives one.
 build=$(date -u +%Y%m%d%H%M)
 out="build/release"
-archive="$out/OpenPocket.xcarchive"
 zip="$out/OpenPocket-$version.zip"
 
 fail() { echo "$1" >&2; exit 1; }
@@ -46,51 +46,11 @@ for code in "$app" "$app/Contents/Resources/Pocket Mic.driver"; do
 done
 
 if ! $check; then
-  # SwiftPM makes no Xcode archive, so wrap the app in one; Xcode's export then uploads it to
-  # Apple's notary service with the account it's signed in to.
-  mkdir -p "$archive/Products/Applications"
-  ditto "$app" "$archive/Products/Applications/OpenPocket.app"
-  cat > "$archive/Info.plist" <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>ApplicationProperties</key>
-  <dict>
-    <key>ApplicationPath</key><string>Applications/OpenPocket.app</string>
-    <key>Architectures</key><array><string>arm64</string><string>x86_64</string></array>
-    <key>CFBundleIdentifier</key><string>$(plutil -extract CFBundleIdentifier raw -o - Info.plist)</string>
-    <key>CFBundleShortVersionString</key><string>$version</string>
-    <key>CFBundleVersion</key><string>$build</string>
-    <key>SigningIdentity</key><string>$identity</string>
-    <key>Team</key><string>$team</string>
-  </dict>
-  <key>ArchiveVersion</key><integer>2</integer>
-  <key>CreationDate</key><date>$(date -u +%Y-%m-%dT%H:%M:%SZ)</date>
-  <key>Name</key><string>OpenPocket</string>
-  <key>SchemeName</key><string>OpenPocket</string>
-</dict>
-</plist>
-EOF
-  cat > "$out/ExportOptions.plist" <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>method</key><string>developer-id</string>
-  <key>destination</key><string>upload</string>
-  <key>teamID</key><string>$team</string>
-  <key>signingStyle</key><string>automatic</string>
-</dict>
-</plist>
-EOF
   echo "Uploading to Apple's notary service…"
-  xcodebuild -exportArchive -archivePath "$archive" -exportPath "$out/upload" \
-    -exportOptionsPlist "$out/ExportOptions.plist" -allowProvisioningUpdates > "$out/upload.log" 2>&1 ||
-    { tail -20 "$out/upload.log"; fail "The upload failed. Is Xcode signed in to team $team (Xcode › Settings › Accounts)?"; }
+  xcode_export "$app" "$out" developer-id "$team" "$version" "$build"
   # Apple usually answers within a few minutes; give it 30.
   for _ in $(seq 60); do
-    if xcodebuild -exportNotarizedApp -archivePath "$archive" -exportPath "$out/notarized" \
+    if xcodebuild -exportNotarizedApp -archivePath "$out/OpenPocket.xcarchive" -exportPath "$out/notarized" \
       > "$out/notarized.log" 2>&1; then
       break
     fi

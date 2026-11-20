@@ -129,7 +129,7 @@ struct GestureActionsView: View {
             field("Then") {
                 HStack(spacing: 10) {
                     Menu {
-                        ForEach(GestureAction.Kind.allCases) { k in
+                        ForEach(GestureAction.Kind.available) { k in
                             Button(k.label) { if rule.action.kind != k { r.wrappedValue.action = k.empty } }
                         }
                     } label: {

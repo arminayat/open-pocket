@@ -37,6 +37,8 @@ enum GestureAction: Codable, Equatable {
     enum Kind: String, CaseIterable, Identifiable {
         case keys, openApp, runShortcut, media, shell
         var id: String { rawValue }
+        /// The kinds this build can run: the sandbox rules out shell commands.
+        static var available: [Kind] { allCases.filter { $0 != .shell || !Distribution.appStore } }
         var label: String {
             switch self {
             case .keys: return "Press a keyboard shortcut"
@@ -90,11 +92,19 @@ enum GestureAction: Codable, Equatable {
             NSWorkspace.shared.openApplication(at: URL(fileURLWithPath: path), configuration: .init())
         case .runShortcut(let name):
             guard !name.isEmpty else { return "No Shortcut name" }
+            if Distribution.appStore {
+                // The sandbox can't start the shortcuts tool; the Shortcuts app's URL works.
+                var url = URLComponents(string: "shortcuts://run-shortcut")!
+                url.queryItems = [URLQueryItem(name: "name", value: name)]
+                guard let target = url.url, NSWorkspace.shared.open(target) else { return "Couldn't open Shortcuts" }
+                return nil
+            }
             return launch("/usr/bin/shortcuts", ["run", name])
         case .media(let key):
             postMedia(key.code)
         case .shell(let command):
             guard !command.isEmpty else { return "No command" }
+            if Distribution.appStore { return "Shell commands don't work in the TestFlight version" }
             return launch("/bin/zsh", ["-lc", command])
         }
         return nil

@@ -21,8 +21,11 @@ enum PocketMicDriver {
     }
 
     /// Returns an error message, or nil on success. Asks for the admin password.
+    /// The sandboxed TestFlight build can't write to /Library: it shows the driver and the folder
+    /// in Finder instead, and returns what to do next.
     static func install() -> String? {
         guard let source = bundled?.path else { return "This build doesn't include Pocket Mic." }
+        if Distribution.appStore { return showForManualInstall(source) }
         let shell = [
             "rm -rf \(quote(installedPath))",
             "cp -R \(quote(source)) /Library/Audio/Plug-Ins/HAL/",
@@ -37,6 +40,12 @@ enum PocketMicDriver {
             return error[NSAppleScript.errorMessage] as? String ?? "Install failed."
         }
         return nil
+    }
+
+    private static func showForManualInstall(_ source: String) -> String {
+        NSWorkspace.shared.open(URL(fileURLWithPath: "/Library/Audio/Plug-Ins/HAL", isDirectory: true))
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: source)])
+        return "Drag Pocket Mic into the HAL folder that just opened (Finder asks for your password), then restart your Mac."
     }
 
     private static func quote(_ s: String) -> String { "'" + s.replacingOccurrences(of: "'", with: "'\\''") + "'" }

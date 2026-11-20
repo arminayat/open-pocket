@@ -32,9 +32,10 @@ two features:
   mic, trigger actions you choose. A guided calibration teaches it your taps.
 
 [`cli/`](cli) is the `pocket` Python command it grew from. Build with
-`mac/build-app.sh`; details in [mac/README.md](mac/README.md). Releases are
-Developer ID–signed, notarized zips made by `mac/release.sh`
-([docs/mac-release.md](docs/mac-release.md)). iCloud Recordings isn't connected
+`mac/build-app.sh`; details in [mac/README.md](mac/README.md). It ships on
+TestFlight (a sandboxed variant, `mac/testflight.sh`) and as a Developer
+ID–signed, notarized zip (`mac/release.sh`); see
+[docs/mac-release.md](docs/mac-release.md). iCloud Recordings isn't connected
 on the Mac yet.
 
 ## Run on your iPhone

@@ -47,8 +47,9 @@ open mac/build/OpenPocket.app
 ```
 
 `SIGN_IDENTITY`, `UNIVERSAL=1` and `BUILD_NUMBER` change how it signs and
-builds; `mac/release.sh` uses them to make a Developer ID–signed, notarized
-zip ([../docs/mac-release.md](../docs/mac-release.md)). The app icon is
+builds, and `APP_STORE=1` makes the sandboxed TestFlight variant. `mac/release.sh`
+makes a Developer ID–signed, notarized zip and `mac/testflight.sh` uploads to
+TestFlight ([../docs/mac-release.md](../docs/mac-release.md)). The app icon is
 `Resources/AppIcon.icns`, made from the iPhone icon by
 `xcrun swift mac/make-icon.swift assets/images/icon.png mac/Resources/AppIcon.icns`.
 

@@ -1,68 +1,83 @@
 # Releasing OpenPocket for Mac
 
-For maintainers. The Mac app ships as a **Developer ID–signed, notarized app in a zip**, not
-through TestFlight. [`mac/release.sh`](../mac/release.sh) builds it for Apple silicon and Intel,
-signs the app and the bundled Pocket Mic driver with the hardened runtime, has Apple notarize the
-app through the account Xcode is signed in to, staples the ticket, checks it with Gatekeeper, and
-zips it; people unzip it and drag OpenPocket to Applications. The iPhone app still goes through
-TestFlight ([testflight.md](testflight.md)).
+For maintainers. The Mac app ships two ways, from the same code:
 
-## Why not TestFlight
+| | TestFlight | Notarized download |
+| --- | --- | --- |
+| Script | [`mac/testflight.sh`](../mac/testflight.sh) | [`mac/release.sh`](../mac/release.sh) |
+| Bundle ID | `com.nestorcodecrafters.openpocket` (shared with the iPhone app) | `com.nestorcodecrafters.openpocket.mac` |
+| App Sandbox | On (TestFlight requires it) | Off |
+| Pocket Mic | Shown in Finder; the person drags it into `/Library/Audio/Plug-Ins/HAL` and restarts | Installed by the app with an administrator prompt |
+| Shell-command gestures | Not offered | Yes |
+| Run a Shortcut | `shortcuts://run-shortcut` (opens Shortcuts) | `/usr/bin/shortcuts run` |
+| OpenWhispr history | Read through a read-only sandbox exception | Read directly |
+| Pocket key | The app's own Keychain item (enter it once) | Shared with the `pocket` CLI |
 
-TestFlight and the Mac App Store require the App Sandbox, and the Mac app needs things the sandbox
-forbids: installing Pocket Mic into `/Library/Audio/Plug-Ins/HAL` with an administrator prompt
-(without it, dictation can't work), running shell commands and `/usr/bin/shortcuts` as gesture
-actions, reading OpenWhispr's history in `~/Library/Application Support/open-whispr`, and the
-`heypocket` Keychain item shared with the CLI. Usual Bot made the same trade the other way: it
-moved its Mac app from a notarized disk image to TestFlight only because it needed push notifications.
-Decided 2026-11-20.
+Both build for Apple silicon and Intel and need macOS 14. Both use only the account Xcode is signed
+in to: no app-specific password, API key or notarytool profile. SwiftPM makes no Xcode archive, so
+[`mac/xcode-export.sh`](../mac/xcode-export.sh) wraps the signed app in a minimal `.xcarchive` and
+lets `xcodebuild -exportArchive` sign and upload it. The variant is the `APP_STORE` compilation
+condition (`Distribution.appStore` in code), set by `APP_STORE=1 mac/build-app.sh`; the sandbox
+entitlements are in [`mac/OpenPocket-AppStore.entitlements`](../mac/OpenPocket-AppStore.entitlements).
+
+The iPhone app has its own TestFlight script and notes ([testflight.md](testflight.md)).
 
 ## One-time setup
 
-1. A **Developer ID Application** certificate for team G6WL4CPNV3 (Nestor Code Crafters), with its
-   private key in your login keychain. Only the Account Holder can make one (Xcode › Settings ›
-   Accounts › Manage Certificates › + › Developer ID Application). `security find-identity -v -p
-   codesigning` lists it.
-2. Xcode signed in to an Apple Account on that team (Xcode › Settings › Accounts). That's all
-   notarization needs: like the iPhone TestFlight upload, it goes through Xcode's account, so there's
-   no app-specific password, API key or notarytool profile to set up. SwiftPM makes no Xcode archive,
-   so the script wraps the signed app in a minimal `.xcarchive` and lets `xcodebuild -exportArchive`
-   (`method` `developer-id`, `destination` `upload`) send it, then polls
-   `xcodebuild -exportNotarizedApp` for the stapled app.
+1. Xcode signed in to an Apple Account on team G6WL4CPNV3 (Nestor Code Crafters) that may make
+   distribution certificates (Admin or Account Holder): Xcode › Settings › Accounts. The TestFlight
+   export makes its cloud-managed Apple Distribution and Mac Installer certificates and the Mac App
+   Store profile itself; it needs an Apple Development certificate in the keychain to sign the
+   archive first.
+2. For the notarized download, a **Developer ID Application** certificate for the team with its
+   private key in your login keychain (only the Account Holder can make one).
+3. For TestFlight, the App Store Connect app "OpenPocket Private" needs the **macOS** platform
+   (open the app and use **Add Platform** if it only has iOS).
 
-## Making a release
+## TestFlight
+
+1. Set `CFBundleShortVersionString` in [`mac/Info.plist`](../mac/Info.plist) and commit.
+2. Run `mac/testflight.sh`. It takes the current UTC time as the build number, builds the sandboxed
+   variant, and uploads the `.pkg`. `--check` exports it into `mac/build/testflight/export` without
+   uploading.
+3. In App Store Connect, wait for processing, then add the build to a test group. Internal testers
+   get it right away; an external group's first build of each version waits for Beta App Review.
+   `ITSAppUsesNonExemptEncryption` is false, so no export compliance question.
+
+## Notarized download
 
 1. Set `CFBundleShortVersionString` in [`mac/Info.plist`](../mac/Info.plist). Bump Pocket Mic's
    own version in [`driver/Info.plist`](../driver/Info.plist) when the driver changed. Setup and
    Settings show the installed version, but the app doesn't yet offer an update when the bundled
    one is newer, so people with an older driver have to press Reinstall under Settings › Pocket Mic.
-2. Commit. The script refuses a dirty working tree, so every release matches a commit.
-3. Run `mac/release.sh`. It takes the current UTC time as the build number, rebuilds the driver,
-   and writes `mac/build/release/OpenPocket-<version>.zip` and its `.sha256`. Notarization usually
-   takes a minute or two; the script waits up to 30. It's a zip, not a disk image, because
-   `xcodebuild` notarizes apps only and Gatekeeper rejects a disk image that isn't notarized itself
-   (`spctl` said "Unnotarized Developer ID" for one on 2026-11-20); the zipped app carries its
-   stapled ticket. A disk image would need `notarytool` with an API key or app-specific password.
-4. Tag the commit (`mac-v<version>`) and hand out the zip. Where it is published (a GitHub
-   release, the public Gist, a website) isn't decided yet; the repository is private, so a GitHub
-   release there isn't a public download.
+2. Commit. Both scripts refuse a dirty working tree, so every build matches a commit.
+3. Run `mac/release.sh`. It writes `mac/build/release/OpenPocket-<version>.zip` and its `.sha256`.
+   Notarization usually takes a minute or two; the script waits up to 30. It's a zip, not a disk
+   image, because `xcodebuild` notarizes apps only and Gatekeeper rejects a disk image that isn't
+   notarized itself (`spctl` said "Unnotarized Developer ID" for one on 2026-11-20); the zipped app
+   carries its stapled ticket.
+4. Tag the commit (`mac-v<version>`) and hand out the zip. Where it is published isn't decided; the
+   repository is private, so a GitHub release there isn't a public download.
 
-`mac/release.sh --check` does everything except notarization, with uncommitted changes allowed.
-Its app is blocked by Gatekeeper on other Macs.
+`mac/release.sh --check` does everything except notarization. Its app is blocked by Gatekeeper on
+other Macs.
 
 ## Not yet verified
 
-- Downloading, unzipping and opening the zip on another Mac.
-- Installing Pocket Mic from a notarized build (AppleScript `do shell script … with administrator
-  privileges` under the hardened runtime), Accessibility hotkeys, and Bluetooth on another Mac.
-- iCloud Recordings stays a placeholder: Developer ID signing alone doesn't grant the iCloud
-  container; that needs iCloud entitlements and a Developer ID provisioning profile embedded in
-  the app.
+- In the TestFlight build: posting the dictation hotkey and media keys from the sandbox (CGEvent
+  with Accessibility), switching the default input device, Bluetooth, and the drag-in Pocket Mic
+  install. The sandboxed build launched locally on 2026-11-20; nothing else was tried. If posting
+  keys turns out to be blocked in the sandbox, dictation can't work from TestFlight.
+- In the notarized build: installing Pocket Mic (AppleScript `do shell script … with administrator
+  privileges` under the hardened runtime), Accessibility hotkeys and Bluetooth on another Mac.
+- iCloud Recordings stays a placeholder in both. The TestFlight variant shares the iPhone app's
+  App ID, which already has the iCloud container, so it is the easier place to add it.
 
 ## When it fails
 
-- **No Developer ID Application certificate**: setup step 1, or set `TEAM_ID` if it's another team.
-- **The upload failed**: Xcode isn't signed in to the team; `mac/build/release/upload.log` and the
-  `.xcdistributionlogs` folder it names (in `$TMPDIR`) have the details, including `Notarization.log`.
+- **No Developer ID Application / Apple Development certificate**: setup steps 1 and 2.
+- **The export or upload failed**: Xcode isn't signed in to the team, or (TestFlight) the app has no
+  macOS platform yet. The script's `export.log` and the `.xcdistributionlogs` folder it names (in
+  `$TMPDIR`) have the details.
 - **Notarization failed**: the script prints `xcodebuild -exportNotarizedApp`'s answer.
 - **x86_64 deprecation warning**: expected with Xcode 27; the binary still targets macOS 14.

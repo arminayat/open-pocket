@@ -38,8 +38,10 @@ struct SetupView: View {
                 }
                 step(2, "Install Pocket Mic",
                      detail: "The virtual microphone your dictation app listens to. Installed\(PocketMicDriver.installedVersion.map { ", version \($0)" } ?? "").") {
-                    Text("The virtual microphone your dictation app listens to. Installing asks for your password, and sound drops out for a second.")
-                    Button(model.installing ? "Installing…" : "Install Pocket Mic") { model.installMic() }
+                    Text(Distribution.appStore
+                         ? "The virtual microphone your dictation app listens to. This version can't install it for you: it shows Pocket Mic and the folder it goes in, you drag it across, then restart your Mac."
+                         : "The virtual microphone your dictation app listens to. Installing asks for your password, and sound drops out for a second.")
+                    Button(model.installing ? "Installing…" : Distribution.appStore ? "Show Pocket Mic in Finder" : "Install Pocket Mic") { model.installMic() }
                         .buttonStyle(PrimaryButtonStyle()).disabled(model.installing)
                     if let e = model.installError { Text(e).foregroundStyle(Palette.warn) }
                 }
