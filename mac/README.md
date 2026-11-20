@@ -46,6 +46,12 @@ mac/build-app.sh                 # → mac/build/OpenPocket.app, ad-hoc signed, 
 open mac/build/OpenPocket.app
 ```
 
+`SIGN_IDENTITY`, `UNIVERSAL=1` and `BUILD_NUMBER` change how it signs and
+builds; `mac/release.sh` uses them to make a Developer ID–signed, notarized
+disk image ([../docs/mac-release.md](../docs/mac-release.md)). The app icon is
+`Resources/AppIcon.icns`, made from the iPhone icon by
+`xcrun swift mac/make-icon.swift assets/images/icon.png mac/Resources/AppIcon.icns`.
+
 First launch asks for Bluetooth, the Pocket key (Keychain item `heypocket`,
 shared with the `pocket` CLI) and Accessibility (to press hotkeys). Setup
 installs Pocket Mic, which asks for your password. Ad-hoc builds change

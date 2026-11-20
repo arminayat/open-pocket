@@ -14,9 +14,10 @@
 - `modules/pocket-wifi`: Swift hotspot/socket/decoder, OAuth relay, ChatGPT ID-token verifier, and wrapper.
 - `modules/pocket-transcription`: independent native disk-streamed HTTPS uploader; no recorder transport responsibilities.
 - `modules/pocket-icloud`: native iCloud availability/session handling, document discovery, coordinated streaming/publication, path/hash policy, and synthetic Swift checks.
-- `mac/`: OpenPocket for Mac (Swift package). `Sources/OpenPocket/Pocket` (BLE, Keychain), `Dictation` (audio devices, hotkey, MP3 → Pocket Mic, OpenWhispr history), `Gestures` (detector, location model, rules/actions, calibration, offline tools), `Views` (Theme tokens and components, one file per screen, snapshots); `Resources` (font + OFL, default location samples); `build-app.sh`.
+- `mac/`: OpenPocket for Mac (Swift package). `Sources/OpenPocket/Pocket` (BLE, Keychain), `Dictation` (audio devices, hotkey, MP3 → Pocket Mic, OpenWhispr history), `Gestures` (detector, location model, rules/actions, calibration, offline tools), `Views` (Theme tokens and components, one file per screen, snapshots); `Resources` (app icon, font + OFL, default location samples); `build-app.sh` (local or signed build), `release.sh` (Developer ID, notarized DMG into ignored `mac/build/release`), `make-icon.swift` (regenerates `AppIcon.icns` from the iPhone icon).
 - `driver/`: Pocket Mic virtual audio device (`PocketMic.cpp`, `Info.plist`, `build.sh`, `install.sh`, `tests/`, vendored `third_party/libASPL`).
 - `cli/`: the earlier `pocket` Python CLI (`pyproject.toml`, `src/pocket`).
+- `docs/mac-release.md`: Mac release setup, steps and why the Mac app isn't on TestFlight.
 - `docs/testflight.md`: external beta submission status and operating notes. `docs/public-beta.md` and `docs/privacy.md` are the source copies of public GitHub Gist documents used by App Store Connect; publishing those files is separate from pushing this private repository.
 - `docs/research`: dated source-backed provider comparisons; implementation truth stays in code and these agent notes.
 - `plugins`: durable Expo native configuration, iCloud container entitlements/Files visibility, and pod source patches.
