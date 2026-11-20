@@ -63,7 +63,7 @@ struct SettingsView: View {
                     Switch(isOn: Binding(get: { model.settings.showInDock }, set: { model.settings.showInDock = $0 }), label: "Show in the Dock")
                 }
                 Row(title: "Pocket Mic", detail: model.micInstalled ? "Virtual microphone · \(PocketMicDriver.installedVersion ?? "") · installed" : "Virtual microphone · not installed") {
-                    Button(model.micInstalled ? "Reinstall" : "Install") { model.installMic() }
+                    Button(Distribution.appStore ? "Show in Finder" : model.micInstalled ? "Reinstall" : "Install") { model.installMic() }
                         .buttonStyle(SecondaryButtonStyle(compact: true)).disabled(model.installing)
                 }
                 Row(title: "Accessibility", detail: model.accessibility ? "Allowed. Needed to press the dictation app's hotkey." : "Needed to press the dictation app's hotkey.", showDivider: false) {
