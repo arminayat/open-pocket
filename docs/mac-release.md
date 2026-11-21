@@ -66,9 +66,30 @@ other Macs.
 
 2026-11-20: `mac/testflight.sh` uploaded **OpenPocket 0.1.0 (202611202203)** for macOS to the App
 Store Connect app (`Uploaded OpenPocket`, `EXPORT SUCCEEDED`; the only warnings were missing dSYMs,
-which don't block processing). Apple's processing result, test groups and Beta App Review were not
-checked: there's no App Store Connect access from the command line here. `mac/release.sh` made a
+which don't block processing). On 2026-11-21 App Store Connect showed it processed and
+**Ready to Submit**, in the internal group "Me" only (1 invite, no installs). Later that day it was added to
+the external group "Beta users" (public link https://testflight.apple.com/join/qkq1GB2v) and
+submitted for Beta App Review; status **Waiting for Review**. Nobody had installed or tried it before
+submission (see Not yet verified). Its What to Test text and the Mac paragraph of the shared review
+notes are below. The app record lists only an iOS App
+Store version; TestFlight shows a macOS builds tab, so uploads work without a macOS App Store version. `mac/release.sh` made a
 notarized 0.1.0 zip (build 202611202205) that Gatekeeper accepts; it isn't published.
+
+### TestFlight copy (0.1.0)
+
+What to Test:
+
+> Mac beta. You need an activated Pocket recorder.
+> - In Setup, allow Bluetooth, connect your Pocket, and enter its key.
+> - Install Pocket Mic: press Show Pocket Mic in Finder, drag it into the HAL folder that opens (Finder asks for your password), then restart your Mac.
+> - Grant Accessibility so OpenPocket can press your dictation app's hotkey and media keys.
+> - Dictate: with the side switch in normal mode, press the side button, speak, press again, and check that your dictation app (for example OpenWhispr, Wispr Flow, or Superwhisper) types the text.
+> - Gestures: in call mode, turn gestures on and try 2 taps (play/pause) and 3 taps (next track), then your own actions. Optionally run Teach OpenPocket your taps.
+> - Report hotkeys or media keys that don't fire, audio that doesn't reach Pocket Mic, and Bluetooth drops through TestFlight feedback. Don't include private recordings or your Pocket key.
+
+Review notes (appended to the iPhone notes; App Store Connect shares one set per app):
+
+> Mac (macOS build): OpenPocket for Mac also needs a physical, activated Pocket recorder, connected over Bluetooth, and the recorder's key, which the user enters once; it is stored in the Mac's Keychain. The Mac app makes no network requests. Without the hardware, the reviewer can open the app and inspect Setup, Dictate, Gestures, and Settings. Dictation also needs the user's own dictation app (for example OpenWhispr, Wispr Flow, or Superwhisper) and the bundled Pocket Mic audio driver: because the app is sandboxed, Setup only shows the driver in Finder, and the user drags it into /Library/Audio/Plug-Ins/HAL (Finder asks for an administrator password) and restarts the Mac. Accessibility permission is requested only to press the hotkeys and media keys the user configures; the app does not read screen content.
 
 ## Not yet verified
 
