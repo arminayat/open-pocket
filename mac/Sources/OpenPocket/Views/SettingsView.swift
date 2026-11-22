@@ -50,8 +50,14 @@ struct SettingsView: View {
             }
 
             RowGroup(title: "Recordings") {
-                Row(title: "iCloud sync", detail: "Shared with Open Pocket on your iPhone. Needs the build signed by the Open Pocket team.", showDivider: false) {
-                    Text("Not available yet").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.faint)
+                Row(title: "From your iPhone", detail: model.recordings.available
+                    ? "Read only, from iCloud Drive › Open Pocket. Turn on iCloud sync in Open Pocket on your iPhone."
+                    : "This download can't open Open Pocket's iCloud folder; the TestFlight build can.", showDivider: false) {
+                    if model.recordings.available {
+                        Button("Open") { model.pane = .recordings }.buttonStyle(SecondaryButtonStyle(compact: true))
+                    } else {
+                        Text("TestFlight only").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.faint)
+                    }
                 }
             }
 

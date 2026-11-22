@@ -36,6 +36,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             print(OfflineTools.trainLocations(URL(fileURLWithPath: args[i + 1]), out: URL(fileURLWithPath: args[i + 2])))
             exit(0)
         }
+        if let i = args.firstIndex(of: "--recordings-test"), i + 1 < args.count {
+            print(LibraryBuilder.offlineCheck(folder: URL(fileURLWithPath: args[i + 1])))
+            exit(0)
+        }
         if let i = CommandLine.arguments.firstIndex(of: "--snapshot"), i + 1 < CommandLine.arguments.count {
             let dir = URL(fileURLWithPath: CommandLine.arguments[i + 1])
             MainActor.assumeIsolated { Snapshots.render(model: model, to: dir) }

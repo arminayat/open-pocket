@@ -33,9 +33,18 @@ grouped lists, and the recorder drawing.
   threshold, and can keep the session (audio plus prompt timings) under
   `~/Library/Application Support/heypocket/calibration-sessions/` for
   improving the detector.
-- **Recordings** (the iPhone library through iCloud) is a placeholder. It needs
-  the app signed by the OpenPocket team (G6WL4CPNV3), which shares the iCloud
-  container `iCloud.com.nestorcodecrafters.openpocket`.
+- **Recordings (TestFlight build).** The iPhone library from iCloud Drive ›
+  Open Pocket (container `iCloud.com.nestorcodecrafters.openpocket`), read only:
+  recordings by day with the AI title (else the folder's title, else the time),
+  time and length, and for each its summary, transcript, notes and audio. It
+  follows the iPhone's layout (`src/lib/icloud/archive.ts`): a recording is the
+  audio checksum in `recording.json`, folders holding the same checksum are one
+  recording, the newest document of each kind wins, and anything invalid or in
+  conflict is skipped. New recordings appear while the app runs. Text downloads
+  from iCloud on its own; audio downloads when you press play and plays only
+  once its size and SHA-256 match. The Mac never creates, renames, moves or
+  deletes anything in the container. Nothing is read until Recordings first
+  opens. The Developer ID download has no iCloud container and says so.
 
 ## Build and run
 
@@ -67,6 +76,8 @@ fail, remove the app from the list and add it again.
 "mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --gesture-test <session dir>   # detector on a recorded session
 "mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --train-locations <session dir> out.json
 "mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --snapshot <dir>               # render every screen to PNG
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --recordings-test <folder>     # parse a folder laid out like the container's Documents/; counts only
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --recordings-folder <folder>   # run with Recordings reading that folder instead of iCloud
 ```
 
 The gesture detector is a port of the original Python prototype. On the two

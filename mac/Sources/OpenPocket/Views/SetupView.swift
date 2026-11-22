@@ -61,11 +61,15 @@ struct SetupView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("OPTIONAL").font(.system(size: 12, weight: .semibold)).tracking(0.6).foregroundStyle(Palette.muted)
                         Text("Recordings from your iPhone").font(.system(size: 15, weight: .semibold)).foregroundStyle(Palette.ink)
-                        Text("Turn on iCloud sync to see Open Pocket's recordings, transcripts and notes here too.")
+                        Text("Turn on iCloud sync in Open Pocket on your iPhone to see its recordings, transcripts and notes here too.")
                             .font(.system(size: 13)).foregroundStyle(Palette.muted)
                     }
                     Spacer()
-                    Text("Needs the signed build").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.faint)
+                    if model.recordings.available {
+                        Button("Open Recordings") { model.pane = .recordings }.buttonStyle(SecondaryButtonStyle(compact: true))
+                    } else {
+                        Text("TestFlight build only").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.faint)
+                    }
                 }
             }
         }

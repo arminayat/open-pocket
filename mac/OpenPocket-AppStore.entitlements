@@ -13,5 +13,21 @@
 	<array>
 		<string>/Library/Application Support/open-whispr/</string>
 	</array>
+	<!-- Recordings read the iPhone app's iCloud Drive folder. The shared App ID has this container. -->
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.com.nestorcodecrafters.openpocket</string>
+	</array>
+	<key>com.apple.developer.ubiquity-container-identifiers</key>
+	<array>
+		<string>iCloud.com.nestorcodecrafters.openpocket</string>
+	</array>
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudDocuments</string>
+	</array>
+	<!-- Xcode's App Store export sets Production by itself (checked 2026-11-22); stated so the file matches the signed app. -->
+	<key>com.apple.developer.icloud-container-environment</key>
+	<string>Production</string>
 </dict>
 </plist>

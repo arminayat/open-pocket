@@ -9,6 +9,8 @@ final class AppModel: ObservableObject {
     let dictation: DictationController
     let rules = GestureRuleStore()
     let gestures: GestureController
+    /// Not forwarded into this model's changes: playback ticks shouldn't redraw every screen.
+    let recordings = RecordingsStore(source: RecordingsStore.launchSource)
 
     @Published private(set) var key: String?
     @Published private(set) var accessibility = Hotkey.isTrusted()
