@@ -1,6 +1,6 @@
 # Open Pocket Privacy Notice
 
-Effective 21 November 2026. Applies to the Open Pocket beta for iPhone and Mac, version 0.1.0.
+Effective 22 November 2026. Applies to the Open Pocket beta for iPhone and Mac, version 0.1.0.
 
 Open Pocket is published by Nestor Code Crafters UG (haftungsbeschränkt). For privacy questions or requests, contact **hi@arminayat.com**.
 
@@ -22,10 +22,11 @@ These services receive the content needed for the selected feature and ordinary 
 
 ## Mac
 
-Open Pocket for Mac connects to your Pocket recorder over Bluetooth. It makes no network requests of its own and has no transcription, AI, or iCloud features in this beta.
+Open Pocket for Mac connects to your Pocket recorder over Bluetooth. It makes no network requests of its own and has no transcription or AI features in this beta.
 
 - **Pocket key:** the recorder key you enter is stored in the Mac's Keychain.
 - **Dictation:** when you press the recorder's side button, Open Pocket switches your Mac's default input to Pocket Mic, a virtual microphone you install, streams the recorder's microphone into it, and presses your dictation app's shortcut. Your dictation app (for example OpenWhispr, Wispr Flow, or Superwhisper) receives that audio and handles it under its own privacy terms, which may include sending it to its own transcription service. Open Pocket then switches your usual input back.
+- **Recordings:** in the TestFlight build, if you turned on iCloud sync in Open Pocket on iPhone, the Mac shows that library from the Open Pocket folder in the same Apple Account's iCloud Drive, read only: folder names, recording details (date, length, size, checksum), transcripts, AI titles and summaries, and notes, plus a recording's audio when you play it. iCloud Drive downloads those files to your Mac. The Mac app does not change, move, delete, or copy out anything in that folder. Nothing is read until you open Recordings.
 - **Recent dictations:** if OpenWhispr is installed, Open Pocket reads its history on your Mac, read only, to show the text of recent dictations. That text stays on your Mac.
 - **Gestures:** while gestures are on, Open Pocket starts a recording on the recorder so its audio streams to the Mac. The recorder keeps that recording like any other.
 - **Tap training:** the calibration analyzes audio on your Mac. You can choose to keep a session (its audio and prompt timings) in the app's storage on your Mac.

@@ -52,7 +52,7 @@ The iPhone app has its own TestFlight script and notes ([testflight.md](testflig
    archive first.
 2. For the notarized download, a **Developer ID Application** certificate for the team with its
    private key in your login keychain (only the Account Holder can make one).
-3. For TestFlight, the App Store Connect app "Open Pocket" needs the **macOS** platform
+3. For TestFlight, the App Store Connect app "Open Pocket Beta" needs the **macOS** platform
    (open the app and use **Add Platform** if it only has iOS).
 
 ## TestFlight
