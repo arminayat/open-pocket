@@ -18,7 +18,7 @@
 - `driver/`: Pocket Mic virtual audio device (`PocketMic.cpp`, `Info.plist`, `build.sh`, `install.sh`, `tests/`, vendored `third_party/libASPL`).
 - `cli/`: the earlier `pocket` Python CLI (`pyproject.toml`, `src/pocket`).
 - `docs/mac-release.md`: Mac release setup and steps for both distributions (TestFlight and the notarized zip), and what is still unverified.
-- `docs/testflight.md`: external beta submission status and operating notes. `docs/public-beta.md` and `docs/privacy.md` are the source copies of public GitHub Gist documents used by App Store Connect; publishing those files is separate from pushing this private repository.
+- `docs/testflight.md`: external beta submission status and operating notes. `docs/public-beta.md` and `docs/privacy.md` are the source copies of public GitHub Gist documents used by App Store Connect; publishing those files is separate from pushing this repository.
 - `docs/research`: dated source-backed provider comparisons; implementation truth stays in code and these agent notes.
 - `plugins`: durable Expo native configuration, iCloud container entitlements/Files visibility, and pod source patches.
 - `scripts`: release tooling (`testflight.sh`: TestFlight archive and upload with external-testing eligibility, saved per build under ignored `build/testflight/build-<number>`; `app-icon.swift`: renders `assets/images/icon.png` via `npm run icon`).

@@ -78,8 +78,9 @@ The iPhone app has its own TestFlight script and notes ([testflight.md](testflig
    image, because `xcodebuild` notarizes apps only and Gatekeeper rejects a disk image that isn't
    notarized itself (`spctl` said "Unnotarized Developer ID" for one on 2026-11-20); the zipped app
    carries its stapled ticket.
-4. Tag the commit (`mac-v<version>`) and hand out the zip. Where it is published isn't decided; the
-   repository is private, so a GitHub release there isn't a public download.
+4. Tag the commit the zip was built from (`mac-v<version>-<build>`) and attach the zip and its
+   `.sha256` to a GitHub Release (`gh release create <tag> <zip> <sha256>`). The repository is public
+   since 2026-11-22.
 
 `mac/release.sh --check` does everything except notarization. Its app is blocked by Gatekeeper on
 other Macs.
@@ -95,19 +96,27 @@ submitted for Beta App Review; status **Waiting for Review**. Nobody had install
 submission (see Not yet verified). Its What to Test text and the Mac paragraph of the shared review
 notes are below. The app record lists only an iOS App
 Store version; TestFlight shows a macOS builds tab, so uploads work without a macOS App Store version. `mac/release.sh` made a
-notarized 0.1.0 zip (build 202611202205) that Gatekeeper accepts; it isn't published.
+notarized 0.1.0 zip (build 202611202205) that Gatekeeper accepts; it was never published (superseded below).
 
-2026-11-22 (not uploaded): the app is named **Open Pocket** (bundle `Open Pocket.app`), and the
-TestFlight variant reads Recordings from iCloud. `mac/testflight.sh --check` built it and exported
+2026-11-22: the app is named **Open Pocket** (bundle `Open Pocket.app`), and the
+TestFlight variant reads Recordings from iCloud. `mac/testflight.sh --check` first built it and exported
 `Open Pocket.pkg` with automatic signing (`EXPORT SUCCEEDED`; Xcode printed `Exported OpenPocket`,
 named after the archive). The app inside is signed Apple Distribution with the existing Mac Team
 Store profile and carries the iCloud entitlements above plus `application-identifier` and
-`team-identifier`; no new profile was made.
+`team-identifier`; no new profile was made. Then `mac/testflight.sh` uploaded **0.1.0 (202611221026)**
+(`Upload succeeded`, `EXPORT SUCCEEDED`). Apple processed it; it is in the internal group "Me" only
+(external state Ready for Beta Submission), deliberately not in Beta users until the maintainer has
+tried it. Its What to Test and the shared review notes' Mac paragraph are the copy below (set through
+the App Store Connect API and read back). The earlier 202611202203 was **Approved** and is in Beta
+users. `mac/release.sh` built, notarized and stapled **0.1.0 (202611221029)** (`spctl`: Notarized
+Developer ID; checked again from the unzipped app), published as the GitHub Release
+[`mac-v0.1.0-202611221029`](https://github.com/arminayat/open-pocket/releases/tag/mac-v0.1.0-202611221029)
+(tag on `9abd388`; SHA-256 `507da6a7…f951fe2e2`; the public download returned 200).
 
 ### TestFlight copy
 
-For the next build. 0.1.0 went out with the same text under the old name and without the
-Recordings line, and its review paragraph said "The Mac app makes no network requests."
+In use since build 202611221026. 202611202203 went out with the same text under the old name and
+without the Recordings line.
 
 What to Test:
 
