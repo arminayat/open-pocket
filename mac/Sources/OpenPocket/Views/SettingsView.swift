@@ -28,7 +28,7 @@ struct SettingsView: View {
             }
 
             RowGroup(title: "Dictation") {
-                Row(title: "Dictation app", detail: "Transcribes your voice. OpenPocket only hands it the audio.") {
+                Row(title: "Dictation app", detail: "Transcribes your voice. Open Pocket only hands it the audio.") {
                     DictationAppMenu()
                 }
                 Row(title: "Its hotkey", detail: "Same as in \(model.settings.app.name). Click, then press the keys.") {
@@ -38,7 +38,7 @@ struct SettingsView: View {
                     Segmented(selection: Binding(get: { model.settings.style }, set: { model.settings.style = $0 }),
                               options: HotkeyStyle.allCases.map { ($0, $0.label) })
                 }
-                Row(title: "Its microphone", detail: "Set to System default. OpenPocket swaps in Pocket Mic while you talk.") {
+                Row(title: "Its microphone", detail: "Set to System default. Open Pocket swaps in Pocket Mic while you talk.") {
                     Text("System default").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.chipGreenText)
                 }
                 Row(title: "Reduce boominess", detail: "Cuts low rumble when the Pocket is close to your mouth.") {
@@ -50,7 +50,7 @@ struct SettingsView: View {
             }
 
             RowGroup(title: "Recordings") {
-                Row(title: "iCloud sync", detail: "Shared with OpenPocket on your iPhone. Needs the build signed by the OpenPocket team.", showDivider: false) {
+                Row(title: "iCloud sync", detail: "Shared with Open Pocket on your iPhone. Needs the build signed by the Open Pocket team.", showDivider: false) {
                     Text("Not available yet").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.faint)
                 }
             }
@@ -76,7 +76,7 @@ struct SettingsView: View {
                 }
             }
 
-            Text("OpenPocket for Mac 0.1.0 · unofficial, not affiliated with the maker of Pocket")
+            Text("Open Pocket for Mac 0.1.0 · unofficial, not affiliated with the maker of Pocket")
                 .font(.system(size: 12)).foregroundStyle(Palette.muted).padding(.horizontal, 4)
         }
     }

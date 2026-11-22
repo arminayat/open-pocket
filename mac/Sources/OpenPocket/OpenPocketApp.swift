@@ -7,7 +7,7 @@ struct OpenPocketApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
 
     var body: some Scene {
-        Window("OpenPocket", id: "main") {
+        Window("Open Pocket", id: "main") {
             RootView()
                 .environmentObject(delegate.model)
                 .frame(minWidth: 900, minHeight: 620)
@@ -85,7 +85,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func updateIcon() {
         guard let button = statusItem?.button else { return }
         button.image = StatusIcon.image(for: model.iconState)
-        button.toolTip = "OpenPocket: \(model.statusLine)"
+        button.toolTip = "Open Pocket: \(model.statusLine)"
     }
 
     @objc private func statusClicked() {
@@ -104,13 +104,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         header.isEnabled = false
         menu.addItem(header)
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Open OpenPocket", action: #selector(openFromMenu), keyEquivalent: "").target = self
+        menu.addItem(withTitle: "Show Open Pocket", action: #selector(openFromMenu), keyEquivalent: "").target = self
         let pause = NSMenuItem(title: "Pause dictation", action: #selector(togglePause), keyEquivalent: "")
         pause.target = self
         pause.state = model.settings.paused ? .on : .off
         menu.addItem(pause)
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Quit OpenPocket", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        menu.addItem(withTitle: "Quit Open Pocket", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         return menu
     }
 

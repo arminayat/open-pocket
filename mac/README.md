@@ -1,8 +1,8 @@
-# OpenPocket for Mac
+# Open Pocket for Mac
 
 A native macOS app (SwiftUI, Swift Package Manager, no Xcode project). It has a
 window plus a menu-bar icon: click the icon to open the window, right-click it
-for a short menu. Same look as OpenPocket on iPhone: Instrument Serif titles,
+for a short menu. Same look as Open Pocket on iPhone: Instrument Serif titles,
 grouped lists, and the recorder drawing.
 
 ## What it does
@@ -10,7 +10,7 @@ grouped lists, and the recorder drawing.
 - **Dictate (side switch in normal mode).** Press the Pocket's side button,
   talk, and press again. Your dictation app transcribes and pastes the text.
   It works with any app that dictates on a hotkey: OpenWhispr, Wispr Flow,
-  Superwhisper, and others. On each press OpenPocket:
+  Superwhisper, and others. On each press Open Pocket:
   1. switches the Mac's default input to **Pocket Mic** (the virtual
      microphone in [`../driver`](../driver)),
   2. presses the dictation app's hotkey (press to start and stop, or hold),
@@ -27,7 +27,7 @@ grouped lists, and the recorder drawing.
   shell command. Defaults: 2 taps → play/pause, 3 taps → next track. While
   gestures are on, the Mac starts a recording on the Pocket so its audio
   streams, and the Pocket keeps that recording.
-- **Teach OpenPocket your taps.** A 2-minute guided calibration: hold still,
+- **Teach Open Pocket your taps.** A 2-minute guided calibration: hold still,
   prompted taps, swipes, grip and rub (which must not count), then 6 taps per
   side. It trains the tap-location model on your grip, suggests a confidence
   threshold, and can keep the session (audio plus prompt timings) under
@@ -42,8 +42,8 @@ grouped lists, and the recorder drawing.
 Needs only the Xcode Command Line Tools (Swift 6).
 
 ```sh
-mac/build-app.sh                 # → mac/build/OpenPocket.app, ad-hoc signed, Pocket Mic inside
-open mac/build/OpenPocket.app
+mac/build-app.sh                 # → "mac/build/Open Pocket.app", ad-hoc signed, Pocket Mic inside
+open "mac/build/Open Pocket.app"
 ```
 
 `SIGN_IDENTITY`, `UNIVERSAL=1` and `BUILD_NUMBER` change how it signs and
@@ -63,10 +63,10 @@ fail, remove the app from the list and add it again.
 ## Checks without a Pocket
 
 ```sh
-mac/build/OpenPocket.app/Contents/MacOS/OpenPocket --loopback-test file.mp3       # audio path into Pocket Mic
-mac/build/OpenPocket.app/Contents/MacOS/OpenPocket --gesture-test <session dir>   # detector on a recorded session
-mac/build/OpenPocket.app/Contents/MacOS/OpenPocket --train-locations <session dir> out.json
-mac/build/OpenPocket.app/Contents/MacOS/OpenPocket --snapshot <dir>               # render every screen to PNG
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --loopback-test file.mp3       # audio path into Pocket Mic
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --gesture-test <session dir>   # detector on a recorded session
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --train-locations <session dir> out.json
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --snapshot <dir>               # render every screen to PNG
 ```
 
 The gesture detector is a port of the original Python prototype. On the two

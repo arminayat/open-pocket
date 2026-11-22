@@ -1,5 +1,5 @@
 #!/bin/bash
-# Build OpenPocket.app with the Pocket Mic driver inside. Needs only the Xcode
+# Build "Open Pocket.app" with the Pocket Mic driver inside. Needs only the Xcode
 # Command Line Tools for a local build; release.sh uses it for releases.
 #
 # Usage: mac/build-app.sh [release|debug]
@@ -16,7 +16,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 CONFIG="${1:-release}"
-APP="build/OpenPocket.app"
+APP="build/Open Pocket.app"
 DRIVER="../driver/build/Pocket Mic.driver"
 IDENTITY="${SIGN_IDENTITY:--}"
 

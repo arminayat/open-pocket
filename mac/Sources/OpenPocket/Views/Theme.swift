@@ -2,7 +2,7 @@ import AppKit
 import CoreText
 import SwiftUI
 
-// Values from the OpenPocket for Mac design canvas (light), with dark-mode equivalents.
+// Values from the Open Pocket for Mac design canvas (light), with dark-mode equivalents.
 
 extension NSColor {
     convenience init(hex: UInt32) {
@@ -218,7 +218,7 @@ struct SecondaryButtonStyle: ButtonStyle {
     }
 }
 
-/// The OpenPocket mark: a dashed outline of a serif "P", from the bundled font's glyph.
+/// The Open Pocket mark: a dashed outline of a serif "P", from the bundled font's glyph.
 struct LogoP: Shape {
     func path(in rect: CGRect) -> Path {
         let font = CTFontCreateWithName(Typeface.serifName as CFString, 100, nil)
@@ -241,7 +241,7 @@ struct Logo: View {
             LogoP()
                 .stroke(Palette.ink, style: StrokeStyle(lineWidth: 1.1, dash: [2.2, 1.9]))
                 .frame(width: 20, height: 26)
-            Text("OpenPocket").font(Typeface.serif(24)).foregroundStyle(Palette.ink)
+            Text("Open Pocket").font(Typeface.serif(24)).foregroundStyle(Palette.ink)
         }
     }
 }

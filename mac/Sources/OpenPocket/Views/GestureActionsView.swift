@@ -19,7 +19,7 @@ struct GestureActionsView: View {
                     Button("‹ Playground") { model.pane = .gestures }
                         .buttonStyle(.plain).font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.link)
                     Text("Gesture actions").font(Typeface.serif(44)).foregroundStyle(Palette.ink)
-                    Text("Pick a gesture, how sure OpenPocket must be, and what happens.")
+                    Text("Pick a gesture, how sure Open Pocket must be, and what happens.")
                         .font(.system(size: 15)).foregroundStyle(Palette.muted)
                 }
                 Spacer()

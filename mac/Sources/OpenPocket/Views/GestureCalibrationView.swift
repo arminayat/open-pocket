@@ -14,7 +14,7 @@ struct GestureCalibrationView: View {
                     model.pane = .gestures
                 }
                 .buttonStyle(.plain).font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.link)
-                Text("Teach OpenPocket your taps").font(Typeface.serif(44)).foregroundStyle(Palette.ink)
+                Text("Teach Open Pocket your taps").font(Typeface.serif(44)).foregroundStyle(Palette.ink)
                 Text("About 2 minutes. Hold the Pocket the way you usually do. You can run this again any time.")
                     .font(.system(size: 15)).foregroundStyle(Palette.muted)
             }
@@ -62,7 +62,7 @@ struct GestureCalibrationView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("What happens").font(Typeface.serif(30)).foregroundStyle(Palette.ink)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 220), spacing: 10)], alignment: .leading, spacing: 10) {
-                tile("1 · Hold still", "5 s, so OpenPocket learns how quiet your grip is.")
+                tile("1 · Hold still", "5 s, so Open Pocket learns how quiet your grip is.")
                 tile("2 · Taps", "1, 2 and 3 taps, a few times each, when asked.")
                 tile("3 · Swipes", "4 swipes, any direction.")
                 tile("4 · Not gestures", "Shift your grip and rub the case. These should not count.")

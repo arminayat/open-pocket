@@ -87,7 +87,7 @@ struct GesturesView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Gestures").font(Typeface.serif(44)).foregroundStyle(Palette.ink)
                     HStack(spacing: 4) {
-                        Text("Tap or swipe the Pocket's back and watch what OpenPocket picks up.")
+                        Text("Tap or swipe the Pocket's back and watch what Open Pocket picks up.")
                             .font(.system(size: 15)).foregroundStyle(Palette.muted)
                         Button("Set up actions") { model.pane = .gestureActions }
                             .buttonStyle(.plain).font(.system(size: 15, weight: .semibold)).foregroundStyle(Palette.link)
@@ -284,13 +284,13 @@ struct GesturesView: View {
                 Text("Your taps").font(Typeface.serif(24)).foregroundStyle(Palette.ink)
                 Text(g.location.isCalibrated
                      ? "Tap spots are trained on \(g.location.sampleCount) of your taps."
-                     : "Tap spots use 48 taps from one test session. Teaching OpenPocket your grip makes taps and spots more reliable.")
+                     : "Tap spots use 48 taps from one test session. Teaching Open Pocket your grip makes taps and spots more reliable.")
                     .font(.system(size: 13)).foregroundStyle(Palette.body).lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
                 if let m = g.calibration.savedMessage {
                     Text(m).font(.system(size: 13)).foregroundStyle(Palette.chipGreenText).fixedSize(horizontal: false, vertical: true)
                 }
-                Button("Teach OpenPocket your taps · 2 min") { model.pane = .gestureCalibration }
+                Button("Teach Open Pocket your taps · 2 min") { model.pane = .gestureCalibration }
                     .buttonStyle(PrimaryButtonStyle())
                 if g.location.isCalibrated {
                     Button("Use the built-in tap spots") { g.resetCalibration() }

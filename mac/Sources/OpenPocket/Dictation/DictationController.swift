@@ -43,7 +43,7 @@ final class DictationController: ObservableObject {
     /// What stops dictation from working right now, if anything.
     func blocker() -> String? {
         if AudioDevices.pocketMic == nil { return "Pocket Mic isn't installed. Install it in Setup." }
-        if !Hotkey.isTrusted() { return "OpenPocket can't press the hotkey yet. Allow it under Accessibility in Setup." }
+        if !Hotkey.isTrusted() { return "Open Pocket can't press the hotkey yet. Allow it under Accessibility in Setup." }
         if settings.shortcut == nil { return "Set your dictation app's hotkey in Settings." }
         return nil
     }

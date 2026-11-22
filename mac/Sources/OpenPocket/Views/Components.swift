@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 /// Front view of the Pocket: a credit-card slab (54 × 86 mm) with LED, side button and engraved
-/// wordmark. Same drawing and finishes as OpenPocket on iPhone (PocketDevice).
+/// wordmark. Same drawing and finishes as Open Pocket on iPhone (PocketDevice).
 struct PocketDeviceView: View {
     var finish: Finish
     var connected: Bool
