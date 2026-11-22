@@ -13,7 +13,7 @@ const ERROR_MESSAGES = {
   'invalid-request': 'The provider could not accept this recording or transcription model.',
   'invalid-response': 'The provider returned an incomplete or unsupported transcription response.',
   'provider-unavailable': 'The transcription provider is unavailable. Check its status before trying again.',
-  'native-unavailable': 'Rebuild and reinstall OpenPocket to enable transcription uploads on this iPhone.',
+  'native-unavailable': 'Rebuild and reinstall Open Pocket to enable transcription uploads on this iPhone.',
   network: 'The connection to the transcription provider failed. The provider may still process and charge for the request.',
   timeout: 'Transcription took too long to finish here. The provider may still be processing the recording.',
   cancelled: 'Transcription stopped in the app. The provider may still process and charge for the request.',

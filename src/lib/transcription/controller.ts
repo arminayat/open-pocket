@@ -70,7 +70,7 @@ export function createTranscriptionController(deps: Dependencies) {
 
   async function changeCredentials(work: (current: TranscriptionCredentials) => TranscriptionCredentials): Promise<boolean> {
     if (loading || saving || active) return false;
-    if (!credentials) { error = 'Transcription settings could not be loaded. Restart OpenPocket to try again.'; notify(); return false; }
+    if (!credentials) { error = 'Transcription settings could not be loaded. Restart Open Pocket to try again.'; notify(); return false; }
     saving = true;
     error = null;
     notify();
@@ -142,7 +142,7 @@ export function createTranscriptionController(deps: Dependencies) {
         }
         if (results[1].status === 'fulfilled') { entries = results[1].value; entriesReady = true; }
         ready = results.every(result => result.status === 'fulfilled');
-        if (!ready) error = 'Saved transcription settings or transcripts could not be read. Restart OpenPocket to try again. No audio was uploaded.';
+        if (!ready) error = 'Saved transcription settings or transcripts could not be read. Restart Open Pocket to try again. No audio was uploaded.';
         loading = false;
         notify();
       })();
@@ -216,7 +216,7 @@ export function createTranscriptionController(deps: Dependencies) {
     },
     async mergeTranscript(recording: LocalRecording, artifact: TranscriptArtifact, expectedEntry?: TranscriptEntry | null): Promise<void> {
       if (loading || saving || active) throw new Error('Transcription is busy. Try syncing again when it finishes.');
-      if (!entriesReady) throw new Error('Saved transcripts could not be read. Restart OpenPocket before syncing transcripts.');
+      if (!entriesReady) throw new Error('Saved transcripts could not be read. Restart Open Pocket before syncing transcripts.');
       let nextEntry: TranscriptEntry;
       let key: string;
       try {
@@ -256,7 +256,7 @@ export function createTranscriptionController(deps: Dependencies) {
     async start(recording: LocalRecording, expectedProvider?: ProviderId) {
       if (loading || saving || active) return;
       if (!ready || !credentials) {
-        error = 'Saved transcription data could not be loaded. Restart OpenPocket before trying again.';
+        error = 'Saved transcription data could not be loaded. Restart Open Pocket before trying again.';
         notify();
         return;
       }

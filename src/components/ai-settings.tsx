@@ -89,12 +89,12 @@ function AutoSummarize({ provider }: { provider: AiProvider }) {
     if (!enabled) { void ai.setAutoSummarize(false); return; }
     const count = unsummarized(library, transcription.entries, ai.entries).length;
     Alert.alert(`Summarize automatically with ${provider.name}?`,
-      `OpenPocket will send each finished transcript without a summary to ${provider.name}, one at a time while the app is open. ${provider.billing} ${count === 1 ? '1 transcript is' : `${count} transcripts are`} waiting now. Failed summaries are not retried automatically.`,
+      `Open Pocket will send each finished transcript without a summary to ${provider.name}, one at a time while the app is open. ${provider.billing} ${count === 1 ? '1 transcript is' : `${count} transcripts are`} waiting now. Failed summaries are not retried automatically.`,
       [{ text: 'Cancel', style: 'cancel' }, { text: 'Turn on', onPress: () => void ai.setAutoSummarize(true) }]);
   };
   const status = !connected ? `Connect ${provider.name} first.`
-    : ai.autoPaused ? 'Paused after a failed summary. It continues with the next recording when you reopen OpenPocket.'
-    : ai.autoSummarize ? 'New transcripts get a title and summary while OpenPocket is open.' : undefined;
+    : ai.autoPaused ? 'Paused after a failed summary. It continues with the next recording when you reopen Open Pocket.'
+    : ai.autoSummarize ? 'New transcripts get a title and summary while Open Pocket is open.' : undefined;
   return (
     <Section title="Automatic" footer={status}>
       <Card><Card.Body className="flex-row items-center gap-4">

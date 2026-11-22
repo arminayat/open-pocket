@@ -26,7 +26,7 @@ export function createChatGPTAccounts(deps: AccountDependencies) {
   const now = deps.now ?? Date.now;
   const notify = () => { for (const listener of listeners) listener(); };
   const requireStore = () => {
-    if (!store) throw new ChatGPTError('ChatGPT accounts could not be loaded. Restart OpenPocket to try again.');
+    if (!store) throw new ChatGPTError('ChatGPT accounts could not be loaded. Restart Open Pocket to try again.');
     return store;
   };
   const save = async (next: ChatGPTStore) => {
@@ -75,7 +75,7 @@ export function createChatGPTAccounts(deps: AccountDependencies) {
           if (!store) await save({ hostId: deps.newHostId(), profiles: [], activeClientId: null });
         } catch {
           store = null;
-          error = 'ChatGPT accounts could not be loaded securely. Restart OpenPocket to try again.';
+          error = 'ChatGPT accounts could not be loaded securely. Restart Open Pocket to try again.';
         } finally { loading = false; notify(); }
       })();
       return loadPromise;
@@ -119,7 +119,7 @@ export function createChatGPTAccounts(deps: AccountDependencies) {
         await save(next);
         signingOut.delete(clientId);
         notice = revoked ? 'Signed out of ChatGPT on this iPhone.'
-          : 'Signed out on this iPhone. Remote sign-out could not be confirmed. Disconnect OpenPocket in ChatGPT Settings to end its access.';
+          : 'Signed out on this iPhone. Remote sign-out could not be confirmed. Disconnect Open Pocket in ChatGPT Settings to end its access.';
       });
     },
     refreshActive() {

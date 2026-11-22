@@ -10,7 +10,7 @@ interface Dependencies {
 }
 
 const SAVE_ERROR = 'Could not save the note on this device. Your draft is still here. Free some storage and try again.';
-const LOAD_ERROR = 'Saved notes could not be read. Restart OpenPocket before editing or syncing notes.';
+const LOAD_ERROR = 'Saved notes could not be read. Restart Open Pocket before editing or syncing notes.';
 const BUSY_ERROR = 'A note is being saved. Try again when it finishes.';
 
 /** One publication at a time; only durable edits become visible to sync. */

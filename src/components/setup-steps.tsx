@@ -57,7 +57,7 @@ function AccountStep({ state }: { state: StepState }) {
         {state === 'done' ? 'Use another account' : 'Sign in to Pocket'}
       </Button>
       {state !== 'done' && <>
-        <AppText className="text-xs leading-5 text-muted">Pocket’s sign-in permission includes access to cloud recordings. OpenPocket uses it to identify your account; recordings download directly from your device.</AppText>
+        <AppText className="text-xs leading-5 text-muted">Pocket’s sign-in permission includes access to cloud recordings. Open Pocket uses it to identify your account; recordings download directly from your device.</AppText>
         <Button variant="ghost" size="sm" isDisabled={disabled} onPress={() => setAdvanced(!advanced)}>{advanced ? 'Hide advanced connection' : 'Advanced connection'}</Button>
         {advanced && <View className="gap-3">
           <View className="flex-row gap-2">
@@ -110,7 +110,7 @@ function ConnectStep({ state, selected }: { state: StepState; selected: PocketDe
   const pocket = usePocket();
   return (
     <StepCard number={3} title="Connect and verify" state={state} last
-      summary={state === 'upcoming' ? 'OpenPocket checks that your recorder accepts this account.' : `Keep ${selected?.name ?? 'Pocket'} nearby and awake, and close the official app.`}>
+      summary={state === 'upcoming' ? 'Open Pocket checks that your recorder accepts this account.' : `Keep ${selected?.name ?? 'Pocket'} nearby and awake, and close the official app.`}>
       {selected && <Button variant="primary" isDisabled={Boolean(pocket.busy)} onPress={() => void pocket.connect(selected)}>
         {pocket.busy === 'connect' ? 'Connecting…' : 'Connect'}
       </Button>}

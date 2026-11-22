@@ -104,8 +104,8 @@ export function RecordingTranscript({ recording }: { recording: LocalRecording }
     if (disabled || !saved || confirming.current) return;
     confirming.current = true;
     const message = resume
-      ? `Resume checking ${provider.name} for the existing transcription. Your audio was already uploaded; this does not create another transcription. Charges for the original job still apply. Keep OpenPocket open. Failed requests are not retried automatically.`
-      : `This sends this recording’s audio to ${provider.name} for cloud transcription and bills your API account separately from ChatGPT. Keep OpenPocket open until it finishes. Failed requests are not retried automatically.${entry ? '\n\nA previous attempt may already have been billed. Retrying uploads the audio again and may incur another charge.' : ''}`;
+      ? `Resume checking ${provider.name} for the existing transcription. Your audio was already uploaded; this does not create another transcription. Charges for the original job still apply. Keep Open Pocket open. Failed requests are not retried automatically.`
+      : `This sends this recording’s audio to ${provider.name} for cloud transcription and bills your API account separately from ChatGPT. Keep Open Pocket open until it finishes. Failed requests are not retried automatically.${entry ? '\n\nA previous attempt may already have been billed. Retrying uploads the audio again and may incur another charge.' : ''}`;
     Alert.alert(resume ? `Resume ${provider.name} transcription?` : `Transcribe with ${provider.name}?`, message, [
       { text: 'Cancel', style: 'cancel', onPress: () => { confirming.current = false; } },
       { text: resume ? 'Resume' : 'Upload & transcribe', onPress: () => {
@@ -138,7 +138,7 @@ export function RecordingTranscript({ recording }: { recording: LocalRecording }
         <View className="flex-row items-center gap-2" accessibilityLiveRegion="polite" accessibilityState={{ busy: true }}>
           <Spinner size="sm" /><AppText className="flex-1 text-sm text-muted">{active.stage} · {provider.name}</AppText>
         </View>
-        <AppText className="text-xs leading-5 text-muted">Keep OpenPocket open. Cancelling stops waiting; the provider may still process and bill this request.</AppText>
+        <AppText className="text-xs leading-5 text-muted">Keep Open Pocket open. Cancelling stops waiting; the provider may still process and bill this request.</AppText>
         <View className="items-start"><ActionButton icon="close" label="Cancel transcription" onPress={transcription.cancel} /></View>
       </> : <>
         {entry?.status === 'pending' && <AppText className="text-sm text-muted">Transcription interrupted. {resume ? `Resume the existing ${provider.name} job without uploading again.` : 'You can try again; the previous attempt may already have been billed.'}</AppText>}

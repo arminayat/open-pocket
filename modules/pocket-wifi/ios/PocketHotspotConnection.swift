@@ -52,7 +52,7 @@ final class PocketHotspotConnection: @unchecked Sendable {
               !(error.domain == NEHotspotConfigurationErrorDomain && error.code == NEHotspotConfigurationError.alreadyAssociated.rawValue) {
               let message = error.code == NEHotspotConfigurationError.userDenied.rawValue
                 ? "The iPhone network prompt was declined. Retry and allow joining Pocket's Wi-Fi."
-                : "The iPhone could not join Pocket's Wi-Fi. Keep OpenPocket in the foreground and retry."
+                : "The iPhone could not join Pocket's Wi-Fi. Keep Open Pocket in the foreground and retry."
               self.finish(request, result: .failure(PocketWifiError("E_HOTSPOT_JOIN", message)))
               self.removeConfiguration(ssid)
             } else {

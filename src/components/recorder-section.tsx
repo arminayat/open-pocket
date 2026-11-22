@@ -82,7 +82,7 @@ export function RecorderSection() {
   const setupComplete = Boolean(pocket.saved);
   return (
     <Section title={setupComplete ? 'Recorder' : 'Set up your recorder'}
-      footer="Your recorder must already be activated in the official Pocket app. OpenPocket keeps recordings on this iPhone and never deletes them from the recorder.">
+      footer="Your recorder must already be activated in the official Pocket app. Open Pocket keeps recordings on this iPhone and never deletes them from the recorder.">
       {!loading && (setupComplete ? <RecorderCard /> : <SetupSteps />)}
       {pocket.busy && !setupComplete && <View className="flex-row items-center gap-3" accessibilityLiveRegion="polite"><Spinner size="sm" /><AppText className="text-sm text-muted">{pocket.busy === 'scan' ? 'Looking for Pocket…' : pocket.busy === 'sync' ? 'Saving new recordings…' : `${pocket.busy.replace('-', ' ')}…`}</AppText></View>}
       {pocket.credential && !loading && !setupComplete && <Button variant="ghost" isDisabled={Boolean(pocket.busy)} onPress={() => void pocket.forget()}>Start over</Button>}

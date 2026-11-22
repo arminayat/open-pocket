@@ -26,7 +26,7 @@ interface Dependencies {
 /** Memory-only view of a provider's models; after a failed or rejected check `models` holds the documented ones. */
 export interface AiModelList { status: 'checking' | 'ready' | 'rejected' | 'failed'; models: AiModelChoice[] }
 
-const LOAD_ERROR = 'Saved AI settings or summaries could not be read. Restart OpenPocket to try again.';
+const LOAD_ERROR = 'Saved AI settings or summaries could not be read. Restart Open Pocket to try again.';
 const SAVE_ERROR = 'Could not save AI settings in Keychain. Please try again.';
 const message = (cause: unknown, fallback: string) => cause instanceof AiError ? cause.message : fallback;
 

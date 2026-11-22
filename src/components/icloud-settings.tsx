@@ -13,7 +13,7 @@ function ICloudDetails() {
   return <>
     <SheetLead>Your recordings, transcripts, summaries and notes on all your Apple devices.</SheetLead>
     <View className="gap-3 pt-1">
-      <SheetPoint icon="folder-outline">Files → iCloud Drive → OpenPocket, with a folder for each day.</SheetPoint>
+      <SheetPoint icon="folder-outline">Files → iCloud Drive → Open Pocket, with a folder for each day.</SheetPoint>
       <SheetPoint icon="person-circle-outline">Use the same Apple account on every device.</SheetPoint>
       <SheetPoint icon="lock-closed-outline">API keys and sign-ins never leave this iPhone.</SheetPoint>
       <SheetPoint icon="shield-checkmark-outline">Nothing is deleted: turning sync off keeps every copy.</SheetPoint>
@@ -33,7 +33,7 @@ export function ICloudRow() {
   const change = (enabled: boolean) => {
     if (!enabled) { void cloud.setEnabled(false); return; }
     Alert.alert(cloud.needsConfirmation ? 'Use the current iCloud account?' : 'Turn on iCloud sync?',
-      'Copy your downloaded recordings, completed transcripts, AI summaries, and saved notes to the current Apple account’s iCloud Drive. OpenPocket will also download recordings and text from this app’s iCloud folder.',
+      'Copy your downloaded recordings, completed transcripts, AI summaries, and saved notes to the current Apple account’s iCloud Drive. Open Pocket will also download recordings and text from this app’s iCloud folder.',
       [{ text: 'Cancel', style: 'cancel' }, { text: 'Turn on', onPress: () => void cloud.setEnabled(true) }]);
   };
   const working = cloud.loading || cloud.saving || cloud.busy;
