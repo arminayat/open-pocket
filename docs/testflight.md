@@ -1,6 +1,6 @@
 # External TestFlight
 
-App Store Connect app: **OpenPocket Private**. Bundle ID: `com.nestorcodecrafters.openpocket`.
+App Store Connect app: **OpenPocket Private**, to be renamed **Open Pocket** (see 2026-11-22 below). Bundle ID: `com.nestorcodecrafters.openpocket`.
 
 Build 0.1.0 (4) was uploaded as internal-only. It cannot be added to an external testing group. Build 0.1.0 (5) removes that upload restriction; Apple processing, Beta App Review, and public-link availability must be verified separately from a successful upload.
 
@@ -10,13 +10,13 @@ Build 0.1.0 (4) was uploaded as internal-only. It cannot be added to an external
 
 Shared by the iPhone and Mac builds (App Store Connect has one description per app).
 
-OpenPocket is an independent, unofficial app for owners of an already-activated Pocket recorder, on iPhone and Mac.
+Open Pocket is an independent, unofficial app for owners of an already-activated Pocket recorder, on iPhone and Mac.
 
 iPhone: connect your recorder, download and play your recordings, share audio, and write notes. Optional features include transcription using your own provider API key, AI titles and summaries, and iCloud Drive sync. API providers may charge for usage.
 
 Mac: use your Pocket as the microphone for the dictation app you already use, such as OpenWhispr, Wispr Flow, or Superwhisper, and tap the recorder to trigger shortcuts, apps, and media keys. Requires macOS 14 or later and the included Pocket Mic audio driver.
 
-A compatible physical Pocket recorder is required. OpenPocket is not affiliated with or supported by the maker of Pocket.
+A compatible physical Pocket recorder is required. Open Pocket is not affiliated with or supported by the maker of Pocket.
 
 ### What to test
 
@@ -25,7 +25,7 @@ A compatible physical Pocket recorder is required. OpenPocket is not affiliated 
 - Add and edit a note on a saved recording.
 - Optionally configure your own transcription provider API key and transcribe a short recording. Confirm the provider and potential charges before uploading.
 - Optionally generate an AI title and summary from a completed transcript using your chosen AI provider.
-- With iCloud sync enabled, check that audio and saved text appear in the OpenPocket folder in iCloud Drive. If you have a second installation on the same Apple account, check that it imports them.
+- With iCloud sync enabled, check that audio and saved text appear in the Open Pocket folder in iCloud Drive. If you have a second installation on the same Apple account, check that it imports them.
 - Report connection failures, interrupted downloads, playback problems, and sync conflicts through TestFlight feedback. Do not include API keys, device keys, private recordings, or unredacted account details.
 
 ### Beta App Review notes
@@ -41,7 +41,7 @@ Transcription and AI features are optional. API-key providers use the tester's o
 1. Wait for build 0.1.0 (5) to finish processing and confirm it is eligible for external testing.
 2. Complete Test Information with the beta description and the maintainer's verified feedback contact and any required URLs. Public marketing URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-public-beta-md . Privacy URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-privacy-md . Source copies are `docs/public-beta.md` and `docs/privacy.md`; update the public Gist when these change. The app repository remains private.
 3. Complete Beta App Review Information with the maintainer's actual contact details and accurate hardware/sign-in requirements. Do not invent a demo account.
-4. Use the existing external group **Beta users**, add build 5, and use the testing notes above.
+4. Use the existing external group **Beta users**, add the newest build, and use the testing notes above.
 5. Submit the build for Beta App Review. This is separate from App Store review and does not publish an App Store listing.
 6. Enable the group's public link. Record the actual URL and Apple review status here once verified. Testers can install only when Apple permits external testing.
 
