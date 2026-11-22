@@ -58,7 +58,7 @@ npm start
 
 ### TestFlight build
 
-The [public beta link](https://testflight.apple.com/join/qkq1GB2v) is live: iPhone build 0.1.0 (5) was approved for external testing (confirmed 21 November 2026), and the Mac build was submitted on 21 November 2026. See [release status](docs/testflight.md) and the [privacy notice](https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-privacy-md).
+The [public beta link](https://testflight.apple.com/join/qkq1GB2v) is live as **Open Pocket Beta**: iPhone build 0.1.0 (6) and Mac build 0.1.0 (202611202203) are approved for external testing (22 November 2026). See [release status](docs/testflight.md) and the [privacy notice](https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-privacy-md).
 
 `npm run ios:testflight` prebuilds, archives a Release build, and uploads it to App Store Connect with external TestFlight eligibility. Signing and upload use the Apple account signed in to Xcode (team from `app.json`). The App Store Connect app record for `com.nestorcodecrafters.openpocket` must exist, and `expo.ios.buildNumber` in `app.json` must be raised before every upload. Archives and export options are saved under `build/testflight/build-<number>`. After Apple finishes processing, add the build to an external testing group, complete Test Information and Beta App Review details, and submit it for Beta App Review. Enable the group's public link to let testers join; availability depends on Apple approval. Uploading does not publish the app to the App Store. The earlier build 4 was uploaded as internal-only and cannot be used for external testing.
 

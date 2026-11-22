@@ -1,6 +1,6 @@
 # External TestFlight
 
-App Store Connect app: **OpenPocket Private**, to be renamed **Open Pocket** (see 2026-11-22 below). Bundle ID: `com.nestorcodecrafters.openpocket`.
+App Store Connect app: **Open Pocket Beta** (was "OpenPocket Private"; "OpenPocket" and "Open Pocket" are taken by other accounts). On devices the app is called **Open Pocket**. Bundle ID: `com.nestorcodecrafters.openpocket`.
 
 Build 0.1.0 (4) was uploaded as internal-only. It cannot be added to an external testing group. Build 0.1.0 (5) removes that upload restriction; Apple processing, Beta App Review, and public-link availability must be verified separately from a successful upload.
 
@@ -39,7 +39,7 @@ Transcription and AI features are optional. API-key providers use the tester's o
 ## App Store Connect steps
 
 1. Wait for build 0.1.0 (5) to finish processing and confirm it is eligible for external testing.
-2. Complete Test Information with the beta description and the maintainer's verified feedback contact and any required URLs. Public marketing URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-public-beta-md . Privacy URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-privacy-md . Source copies are `docs/public-beta.md` and `docs/privacy.md`; update the public Gist when these change. The app repository remains private.
+2. Complete Test Information with the beta description and the maintainer's verified feedback contact and any required URLs. Public marketing URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-public-beta-md . Privacy URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-privacy-md . Source copies are `docs/public-beta.md` and `docs/privacy.md`; update the public Gist when these change. 
 3. Complete Beta App Review Information with the maintainer's actual contact details and accurate hardware/sign-in requirements. Do not invent a demo account.
 4. Use the existing external group **Beta users**, add the newest build, and use the testing notes above.
 5. Submit the build for Beta App Review. This is separate from App Store review and does not publish an App Store listing.
@@ -58,3 +58,5 @@ The beta description, review contact supplied by the maintainer, hardware review
 2026-11-21 changes: the Beta App Description in App Store Connect now covers iPhone and Mac (the copy above; confirmed saved after a reload). `docs/privacy.md` (new Mac section, effective 21 November 2026) and `docs/public-beta.md` (iPhone and Mac) were republished to the Gist with `gh gist edit` and match the repository. Beta users' "Test iPhone and iPad Apps on Apple Silicon Macs" is now Not Available (Apple Vision Pro left Available). Renaming the app to "OpenPocket" failed: App Store Connect reports the name is already used, so the app (and the public join page) is still "OpenPocket Private"; another name is the maintainer's choice.
 
 The Beta App Review notes in App Store Connect are shared by both platforms; on 2026-11-21 a Mac paragraph was appended (text in [mac-release.md](mac-release.md)), and the macOS build was added to Beta users and submitted for review.
+
+2026-11-22, through the App Store Connect API (a team API key the maintainer already had; no key is stored in this repository): renaming the app to "Open Pocket" was refused (`DUPLICATE.DIFFERENT_ACCOUNT`, the name is used by another account), so at the maintainer's choice it is now **Open Pocket Beta** (read back). The Beta App Description uses the new name (the copy above). The macOS build 0.1.0 (202611202203) is **Approved** and in external testing in Beta users. iOS build **0.1.0 (6)** (renamed app, the Settings "unofficial" line, aligned Expo packages) was archived and uploaded (`ARCHIVE SUCCEEDED`, `Upload succeeded`, `EXPORT SUCCEEDED`), processed, got What to Test notes, was added to Beta users and submitted. Apple approved it at once (a later build of an approved version), so it is in external testing; it expires about 2027-02-20. Beta users had 1 tester. Nobody has installed build 6 or the Mac build yet.
