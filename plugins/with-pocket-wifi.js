@@ -7,7 +7,7 @@ module.exports = function withPocketWifi(config) {
   });
   return withInfoPlist(config, (mod) => {
     mod.modResults.NSLocalNetworkUsageDescription =
-      'OpenPocket connects directly to your Pocket recorder to download recordings over Wi-Fi.';
+      'Open Pocket connects directly to your Pocket recorder to download recordings over Wi-Fi.';
     return mod;
   });
 };

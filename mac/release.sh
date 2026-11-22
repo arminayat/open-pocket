@@ -1,5 +1,5 @@
 #!/bin/bash
-# Builds OpenPocket for Mac for Apple silicon and Intel, signs it with the team's Developer ID,
+# Builds Open Pocket for Mac for Apple silicon and Intel, signs it with the team's Developer ID,
 # has Apple notarize it through the account Xcode is signed in to (no password or API key to
 # set up), staples the ticket, and zips it. docs/mac-release.md has the rest.
 #
@@ -29,13 +29,13 @@ if ! $check && [[ -n "$(git status --porcelain)" ]]; then
   fail "Commit or stash your changes first; releases come from a commit."
 fi
 
-echo "OpenPocket for Mac $version ($build), signed by $identity"
+echo "Open Pocket for Mac $version ($build), signed by $identity"
 rm -rf "$out"
 mkdir -p "$out"
 # The driver is built fresh so a release never carries a stale one.
 rm -rf "../driver/build"
 UNIVERSAL=1 SIGN_IDENTITY="$identity" BUILD_NUMBER="$build" ./build-app.sh release
-app="build/OpenPocket.app"
+app="build/Open Pocket.app"
 
 codesign --verify --deep --strict --verbose=2 "$app"
 for code in "$app" "$app/Contents/Resources/Pocket Mic.driver"; do
@@ -57,8 +57,8 @@ if ! $check; then
     grep -q "is processing" "$out/notarized.log" || { cat "$out/notarized.log"; fail "Notarization failed."; }
     sleep 30
   done
-  [[ -d "$out/notarized/OpenPocket.app" ]] || fail "Apple hadn't finished notarizing after 30 minutes. Run it again later."
-  app="$out/notarized/OpenPocket.app"
+  [[ -d "$out/notarized/Open Pocket.app" ]] || fail "Apple hadn't finished notarizing after 30 minutes. Run it again later."
+  app="$out/notarized/Open Pocket.app"
   xcrun stapler validate "$app"
   spctl --assess --type execute --verbose=2 "$app"
 fi

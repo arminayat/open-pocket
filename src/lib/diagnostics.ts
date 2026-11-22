@@ -98,7 +98,7 @@ export function createDiagnostics() {
     exportReport(extra: Record<string, unknown> = {}) {
       const info = safeDetails(extra);
       return [
-        'OpenPocket diagnostic report',
+        'Open Pocket diagnostic report',
         'Credentials, account identifiers and device identifiers are redacted.',
         JSON.stringify(info),
         ...entries.map(entry => `${entry.timestamp} [${entry.stage}] ${entry.message}${

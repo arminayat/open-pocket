@@ -1,6 +1,6 @@
 #!/bin/bash
-# Builds the sandboxed TestFlight variant of OpenPocket for Mac (Apple silicon and Intel) and
-# uploads it to App Store Connect, to the same app as the iPhone version ("OpenPocket Private",
+# Builds the sandboxed TestFlight variant of Open Pocket for Mac (Apple silicon and Intel) and
+# uploads it to App Store Connect, to the same app as the iPhone version ("Open Pocket Beta",
 # bundle ID com.nestorcodecrafters.openpocket). Xcode signs it for the App Store and uploads it with
 # the account it's signed in to, making the certificates and profile it needs itself.
 # docs/mac-release.md has the rest; the notarized download with every feature is release.sh.
@@ -31,20 +31,22 @@ if ! $check && [[ -n "$(git status --porcelain)" ]]; then
   fail "Commit or stash your changes first; uploads come from a commit."
 fi
 
-echo "OpenPocket for Mac $version ($build), TestFlight"
+echo "Open Pocket for Mac $version ($build), TestFlight"
 rm -rf "$out"
 mkdir -p "$out"
 rm -rf "../driver/build"
 APP_STORE=1 UNIVERSAL=1 SIGN_IDENTITY="$identity" BUILD_NUMBER="$build" ./build-app.sh release
-codesign -d --entitlements - build/OpenPocket.app 2>/dev/null | grep -q app-sandbox ||
+app="build/Open Pocket.app"
+codesign -d --entitlements - "$app" 2>/dev/null | grep -q app-sandbox ||
   fail "The app isn't sandboxed; TestFlight would refuse it."
 
 $check && export XCODE_EXPORT_DESTINATION=export
-xcode_export build/OpenPocket.app "$out" app-store-connect "$team" "$version" "$build"
+xcode_export "$app" "$out" app-store-connect "$team" "$version" "$build"
 if $check; then
-  echo "Done: mac/$out/export/OpenPocket.pkg (not uploaded)"
+  echo "Done: the .pkg is in mac/$out/export (not uploaded)"
 else
-  grep -q "Uploaded OpenPocket" "$out/export.log" || fail "Xcode didn't report an upload; see mac/$out/export.log."
-  echo "Uploaded OpenPocket $version ($build). Apple processes it in a few minutes; then add it to a"
+  # Xcode prints "Uploaded <archive name>" once App Store Connect has the build.
+  grep -q "^Uploaded " "$out/export.log" || fail "Xcode didn't report an upload; see mac/$out/export.log."
+  echo "Uploaded Open Pocket $version ($build). Apple processes it in a few minutes; then add it to a"
   echo "TestFlight group in App Store Connect."
 fi

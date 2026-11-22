@@ -172,12 +172,12 @@ export function PocketProvider({ children }: { children: React.ReactNode }) {
 
   const downloadRecording = async (recording: Recording, transport: Transport) => {
     const foreground = AppState.currentState !== 'background';
-    if (transport === 'wifi' && !foreground) throw new Error('Keep OpenPocket open to start a Wi-Fi download.');
+    if (transport === 'wifi' && !foreground) throw new Error('Keep Open Pocket open to start a Wi-Fi download.');
     activeTransport.current = transport;
     let target: ReturnType<typeof createDownloadTarget> | null = null;
     try {
       if (foreground) await activateKeepAwakeAsync('openpocket-transfer').catch(() => {});
-      if (!mounted.current) throw new Error('OpenPocket closed before the download started.');
+      if (!mounted.current) throw new Error('Open Pocket closed before the download started.');
       target = createDownloadTarget(recording, transport);
       setProgress({ recordingId: recording.id, transport, stage: 'Preparing download', receivedBytes: 0, expectedBytes: 0 });
       const local = await client.download(recording, transport, target, setProgress);

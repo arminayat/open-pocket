@@ -31,7 +31,7 @@ const native = requireOptionalNativeModule<PocketWifiNative>('PocketWifi');
 function requireNative(): PocketWifiNative {
   if (Platform.OS !== 'ios' || !native) {
     throw new Error(
-      'Wi-Fi transfer needs the OpenPocket iPhone development build. It is unavailable in Expo Go and on other platforms.',
+      'Wi-Fi transfer needs the Open Pocket iPhone development build. It is unavailable in Expo Go and on other platforms.',
     );
   }
   return native;
@@ -52,7 +52,7 @@ const PocketWifi = {
 export const PocketOAuthLoopback = {
   start: async () => {
     if (Platform.OS !== 'ios' || !native) {
-      throw new Error('Pocket sign-in needs the OpenPocket iPhone development build. Use an API key instead.');
+      throw new Error('Pocket sign-in needs the Open Pocket iPhone development build. Use an API key instead.');
     }
     return native.startOAuthLoopback();
   },
@@ -62,7 +62,7 @@ export const PocketOAuthLoopback = {
 export const ChatGPTIdentity = {
   verify: async (idToken: string, jwksJson: string, clientId: string, nonce: string) => {
     if (Platform.OS !== 'ios' || !native || !native.verifyChatGPTIdentity) {
-      throw new Error('ChatGPT sign-in needs the latest OpenPocket iPhone development build.');
+      throw new Error('ChatGPT sign-in needs the latest Open Pocket iPhone development build.');
     }
     return native.verifyChatGPTIdentity(idToken, jwksJson, clientId, nonce);
   },

@@ -1,6 +1,6 @@
 # External TestFlight
 
-App Store Connect app: **OpenPocket Private**. Bundle ID: `com.nestorcodecrafters.openpocket`.
+App Store Connect app: **Open Pocket Beta** (was "OpenPocket Private"; "OpenPocket" and "Open Pocket" are taken by other accounts). On devices the app is called **Open Pocket**. Bundle ID: `com.nestorcodecrafters.openpocket`.
 
 Build 0.1.0 (4) was uploaded as internal-only. It cannot be added to an external testing group. Build 0.1.0 (5) removes that upload restriction; Apple processing, Beta App Review, and public-link availability must be verified separately from a successful upload.
 
@@ -8,7 +8,15 @@ Build 0.1.0 (4) was uploaded as internal-only. It cannot be added to an external
 
 ### Beta app description
 
-OpenPocket is an independent, unofficial iPhone app for owners of an already-activated Pocket recorder. Connect your recorder, download and play your recordings, share audio, and write notes. Optional features include transcription using your own provider API key, AI titles and summaries, and iCloud Drive sync. API providers may charge for usage. A compatible physical Pocket recorder is required to obtain recordings. OpenPocket is not affiliated with or supported by the maker of Pocket.
+Shared by the iPhone and Mac builds (App Store Connect has one description per app).
+
+Open Pocket is an independent, unofficial app for owners of an already-activated Pocket recorder, on iPhone and Mac.
+
+iPhone: connect your recorder, download and play your recordings, share audio, and write notes. Optional features include transcription using your own provider API key, AI titles and summaries, and iCloud Drive sync. API providers may charge for usage.
+
+Mac: use your Pocket as the microphone for the dictation app you already use, such as OpenWhispr, Wispr Flow, or Superwhisper, and tap the recorder to trigger shortcuts, apps, and media keys. Requires macOS 14 or later and the included Pocket Mic audio driver.
+
+A compatible physical Pocket recorder is required. Open Pocket is not affiliated with or supported by the maker of Pocket.
 
 ### What to test
 
@@ -17,7 +25,7 @@ OpenPocket is an independent, unofficial iPhone app for owners of an already-act
 - Add and edit a note on a saved recording.
 - Optionally configure your own transcription provider API key and transcribe a short recording. Confirm the provider and potential charges before uploading.
 - Optionally generate an AI title and summary from a completed transcript using your chosen AI provider.
-- With iCloud sync enabled, check that audio and saved text appear in the OpenPocket folder in iCloud Drive. If you have a second installation on the same Apple account, check that it imports them.
+- With iCloud sync enabled, check that audio and saved text appear in the Open Pocket folder in iCloud Drive. If you have a second installation on the same Apple account, check that it imports them.
 - Report connection failures, interrupted downloads, playback problems, and sync conflicts through TestFlight feedback. Do not include API keys, device keys, private recordings, or unredacted account details.
 
 ### Beta App Review notes
@@ -31,9 +39,9 @@ Transcription and AI features are optional. API-key providers use the tester's o
 ## App Store Connect steps
 
 1. Wait for build 0.1.0 (5) to finish processing and confirm it is eligible for external testing.
-2. Complete Test Information with the beta description and the maintainer's verified feedback contact and any required URLs. Public marketing URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-public-beta-md . Privacy URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-privacy-md . Source copies are `docs/public-beta.md` and `docs/privacy.md`; update the public Gist when these change. The app repository remains private.
+2. Complete Test Information with the beta description and the maintainer's verified feedback contact and any required URLs. Public marketing URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-public-beta-md . Privacy URL: https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-privacy-md . Source copies are `docs/public-beta.md` and `docs/privacy.md`; update the public Gist when these change. 
 3. Complete Beta App Review Information with the maintainer's actual contact details and accurate hardware/sign-in requirements. Do not invent a demo account.
-4. Use the existing external group **Beta users**, add build 5, and use the testing notes above.
+4. Use the existing external group **Beta users**, add the newest build, and use the testing notes above.
 5. Submit the build for Beta App Review. This is separate from App Store review and does not publish an App Store listing.
 6. Enable the group's public link. Record the actual URL and Apple review status here once verified. Testers can install only when Apple permits external testing.
 
@@ -44,3 +52,11 @@ Transcription and AI features are optional. API-key providers use the tester's o
 2026-11-05 live App Store Connect result: build **0.1.0 (5)** was submitted to Beta App Review and is **Waiting for Review** in the existing external group **Beta users** (1 build, 0 testers at submission). The public link **https://testflight.apple.com/join/qkq1GB2v** is enabled, with no custom tester limit. Apple explicitly reports that testers cannot join until the group has an approved build. Automatic tester notification was selected during submission; approval/public installation is not yet established.
 
 The beta description, review contact supplied by the maintainer, hardware review notes, and build-specific What to Test instructions were saved. Sign-in is not required to open the app; the review notes explain that recorder workflows require physical hardware and owner-authorized Pocket access. The prior private-repository marketing/privacy placeholders were replaced by the public Gist URLs above. Both public document sections returned HTTP 200 without authentication, and App Store Connect confirmed the metadata as Saved before submission. No app code, environment variable, migration, signed binary, or physical-device behavior changed in this submission step.
+
+2026-11-21 App Store Connect check (read-only): iOS build **0.1.0 (5)** is **Approved** for external testing, in **Beta users** and the internal group. The public link https://testflight.apple.com/join/qkq1GB2v is live: the unauthenticated join page offers "Join the OpenPocket Private beta". The group has 0 external testers. Its setting "Test iPhone and iPad Apps on Apple Silicon Macs" is on, so until a macOS build is approved, Mac testers get the iPhone build. The Beta App Description is shared by both platforms and still describes an iPhone-only app. The beta's public name is the App Store Connect app name, "OpenPocket Private".
+
+2026-11-21 changes: the Beta App Description in App Store Connect now covers iPhone and Mac (the copy above; confirmed saved after a reload). `docs/privacy.md` (new Mac section, effective 21 November 2026) and `docs/public-beta.md` (iPhone and Mac) were republished to the Gist with `gh gist edit` and match the repository. Beta users' "Test iPhone and iPad Apps on Apple Silicon Macs" is now Not Available (Apple Vision Pro left Available). Renaming the app to "OpenPocket" failed: App Store Connect reports the name is already used, so the app (and the public join page) is still "OpenPocket Private"; another name is the maintainer's choice.
+
+The Beta App Review notes in App Store Connect are shared by both platforms; on 2026-11-21 a Mac paragraph was appended (text in [mac-release.md](mac-release.md)), and the macOS build was added to Beta users and submitted for review.
+
+2026-11-22, through the App Store Connect API (a team API key the maintainer already had; no key is stored in this repository): renaming the app to "Open Pocket" was refused (`DUPLICATE.DIFFERENT_ACCOUNT`, the name is used by another account), so at the maintainer's choice it is now **Open Pocket Beta** (read back). The Beta App Description uses the new name (the copy above). The macOS build 0.1.0 (202611202203) is **Approved** and in external testing in Beta users. iOS build **0.1.0 (6)** (renamed app, the Settings "unofficial" line, aligned Expo packages) was archived and uploaded (`ARCHIVE SUCCEEDED`, `Upload succeeded`, `EXPORT SUCCEEDED`), processed, got What to Test notes, was added to Beta users and submitted. Apple approved it at once (a later build of an approved version), so it is in external testing; it expires about 2027-02-20. Beta users had 1 tester. Nobody has installed build 6 or the Mac build yet. Later that day the Mac TestFlight build 0.1.0 (202611221026), with the new name and iCloud Recordings, was uploaded and left in the internal group only ([mac-release.md](mac-release.md)); the shared review notes' Mac paragraph was replaced to mention Recordings. `docs/privacy.md` (effective 22 November 2026: new name, Mac Recordings) and `docs/public-beta.md` (new name) were republished to the Gist with `gh gist edit` and match the repository.

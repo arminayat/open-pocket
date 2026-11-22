@@ -154,7 +154,7 @@ export function createICloudController(deps: Dependencies) {
       } catch {
         if (!value) {
           unsavedOptOut = true;
-          error = 'Sync is paused, but the Off setting could not be saved. Retry saving Off before closing OpenPocket.';
+          error = 'Sync is paused, but the Off setting could not be saved. Retry saving Off before closing Open Pocket.';
         } else { enabled = false; error = 'Could not enable iCloud sync. Check iCloud Drive and try again.'; }
       } finally { preferenceWrites -= 1; saving = preferenceWrites > 0; notify(); }
       });

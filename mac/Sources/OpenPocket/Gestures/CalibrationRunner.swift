@@ -1,6 +1,6 @@
 import Foundation
 
-/// "Teach OpenPocket your taps": a guided session like last night's recordings.
+/// "Teach Open Pocket your taps": a guided session like last night's recordings.
 ///
 /// Hold still → prompted 1/2/3 taps → swipes → grip and rub (must not count) → taps on each
 /// side. Each trial is scored live. The tap-spot taps train the location model, the scores

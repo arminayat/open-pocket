@@ -1,13 +1,13 @@
 # OpenPocket
 
-An iPhone MVP for direct access to an already-activated Pocket recorder. Built from Armin's Expo boilerplate with Expo 57, TypeScript, HeroUI Native, and Uniwind.
+An iPhone MVP for direct access to an already-activated Pocket recorder, plus OpenPocket for Mac (`mac/`). On devices and in TestFlight the app is called **Open Pocket**. Built from Armin's Expo boilerplate with Expo 57, TypeScript, HeroUI Native, and Uniwind.
 
 > **Unofficial project.** OpenPocket is independent and non-commercial. It is not affiliated with, endorsed by, or supported by Open Vision Engineering, Inc., the maker of Pocket. See [Disclaimer](#disclaimer).
 
 ## What it does
 
 - Connect through Pocket OAuth, a personal API key, or an existing device key.
-- Optionally connect ChatGPT during setup or in Settings for future AI features; manage saved accounts and sign out independently of Pocket.
+- Optionally connect ChatGPT during setup or in Settings to write AI titles and summaries on your plan; manage saved accounts and sign out independently of Pocket.
 - Scan for nearby recorders, authenticate, and display battery and firmware.
 - List recordings and automatically download new ones over Bluetooth; Wi-Fi transport is implemented but has no manual UI.
 - Keep separate Bluetooth and Wi-Fi copies for comparing transfer results.
@@ -58,13 +58,13 @@ npm start
 
 ### TestFlight build
 
-The [public beta link](https://testflight.apple.com/join/qkq1GB2v) is enabled; build 0.1.0 (5) was submitted for Beta App Review on 5 November 2026 and is awaiting Apple approval before testers can join. See [release status](docs/testflight.md) and the [privacy notice](https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-privacy-md).
+The [public beta link](https://testflight.apple.com/join/qkq1GB2v) is live as **Open Pocket Beta**: iPhone build 0.1.0 (6) and Mac build 0.1.0 (202611202203) are approved for external testing (22 November 2026). See [release status](docs/testflight.md) and the [privacy notice](https://gist.github.com/arminayat/e19411ea87e00624cc029ecedbf51635#file-privacy-md).
 
 `npm run ios:testflight` prebuilds, archives a Release build, and uploads it to App Store Connect with external TestFlight eligibility. Signing and upload use the Apple account signed in to Xcode (team from `app.json`). The App Store Connect app record for `com.nestorcodecrafters.openpocket` must exist, and `expo.ios.buildNumber` in `app.json` must be raised before every upload. Archives and export options are saved under `build/testflight/build-<number>`. After Apple finishes processing, add the build to an external testing group, complete Test Information and Beta App Review details, and submit it for Beta App Review. Enable the group's public link to let testers join; availability depends on Apple approval. Uploading does not publish the app to the App Store. The earlier build 4 was uploaded as internal-only and cannot be used for external testing.
 
 Use the installed development build. Expo Go cannot run the BLE or local Wi-Fi module. Rebuild after native dependency, module, or config-plugin changes. No backend, environment secrets, or database migrations are required.
 
-ChatGPT sign-in adds a native ID-token verifier. For an existing checkout, run `npm run ios:pods` and rebuild with `npm run ios:device` before using it. It uses OpenAI's [open-source/local-app sign-in flow](https://developers.openai.com/siwc/token-sharing-open-source/sign-in), with dynamic registration, PKCE, and the existing loopback callback. No OpenAI API key or client secret is needed for that sign-in. Credentials are stored in device-only Keychain; account registrations survive sign-out for later reconnection. This is an account connection only: ChatGPT generation is not implemented, and this ChatGPT flow does not support audio transcription. Real iPhone sign-in still needs acceptance testing.
+ChatGPT sign-in adds a native ID-token verifier. For an existing checkout, run `npm run ios:pods` and rebuild with `npm run ios:device` before using it. It uses OpenAI's [open-source/local-app sign-in flow](https://developers.openai.com/siwc/token-sharing-open-source/sign-in), with dynamic registration, PKCE, and the existing loopback callback. No OpenAI API key or client secret is needed for that sign-in. Credentials are stored in device-only Keychain; account registrations survive sign-out for later reconnection. It can write AI titles and summaries on the user's ChatGPT plan; it does not support audio transcription. Real iPhone sign-in still needs acceptance testing.
 
 ## Transcription with your own API key
 

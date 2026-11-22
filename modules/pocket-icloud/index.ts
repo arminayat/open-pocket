@@ -23,7 +23,7 @@ const native = requireOptionalNativeModule<NativeICloud & { reserve(account: str
 
 export function requireICloudNative(): NativeICloud {
   if (Platform.OS !== 'ios' || !native) {
-    throw new Error('iCloud sync needs the latest OpenPocket iPhone development build.');
+    throw new Error('iCloud sync needs the latest Open Pocket iPhone development build.');
   }
   return {
     status: () => native.status(),
@@ -43,7 +43,7 @@ export function requireICloudNative(): NativeICloud {
 export function getICloudStatus(): Promise<ICloudStatus> {
   if (Platform.OS !== 'ios' || !native) {
     return Promise.resolve({ available: false, accountId: null,
-      reason: 'iCloud sync needs the latest OpenPocket iPhone development build.' });
+      reason: 'iCloud sync needs the latest Open Pocket iPhone development build.' });
   }
   return native.status();
 }

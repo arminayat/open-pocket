@@ -12,7 +12,7 @@ const native = requireOptionalNativeModule<NativeTranscription>('PocketTranscrip
 
 export function requireTranscriptionNative(): NativeTranscription {
   if (Platform.OS !== 'ios' || !native) {
-    throw new Error('Transcription needs the latest OpenPocket iPhone development build.');
+    throw new Error('Transcription needs the latest Open Pocket iPhone development build.');
   }
   return native;
 }

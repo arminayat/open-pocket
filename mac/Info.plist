@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>OpenPocket</string>
+	<string>Open Pocket</string>
 	<key>CFBundleDisplayName</key>
-	<string>OpenPocket</string>
+	<string>Open Pocket</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -31,7 +31,7 @@
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>OpenPocket connects to your Pocket recorder over Bluetooth.</string>
+	<string>Open Pocket connects to your Pocket recorder over Bluetooth.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>MIT License. Unofficial; not affiliated with the maker of Pocket.</string>
 </dict>

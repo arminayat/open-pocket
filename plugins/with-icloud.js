@@ -13,7 +13,7 @@ module.exports = function withICloud(config) {
     mod.modResults.NSUbiquitousContainers = {
       [container]: {
         NSUbiquitousContainerIsDocumentScopePublic: true,
-        NSUbiquitousContainerName: 'OpenPocket',
+        NSUbiquitousContainerName: 'Open Pocket',
         NSUbiquitousContainerSupportedFolderLevels: 'Any',
       },
     };

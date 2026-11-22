@@ -1,8 +1,8 @@
-# OpenPocket for Mac
+# Open Pocket for Mac
 
 A native macOS app (SwiftUI, Swift Package Manager, no Xcode project). It has a
 window plus a menu-bar icon: click the icon to open the window, right-click it
-for a short menu. Same look as OpenPocket on iPhone: Instrument Serif titles,
+for a short menu. Same look as Open Pocket on iPhone: Instrument Serif titles,
 grouped lists, and the recorder drawing.
 
 ## What it does
@@ -10,7 +10,7 @@ grouped lists, and the recorder drawing.
 - **Dictate (side switch in normal mode).** Press the Pocket's side button,
   talk, and press again. Your dictation app transcribes and pastes the text.
   It works with any app that dictates on a hotkey: OpenWhispr, Wispr Flow,
-  Superwhisper, and others. On each press OpenPocket:
+  Superwhisper, and others. On each press Open Pocket:
   1. switches the Mac's default input to **Pocket Mic** (the virtual
      microphone in [`../driver`](../driver)),
   2. presses the dictation app's hotkey (press to start and stop, or hold),
@@ -27,29 +27,40 @@ grouped lists, and the recorder drawing.
   shell command. Defaults: 2 taps → play/pause, 3 taps → next track. While
   gestures are on, the Mac starts a recording on the Pocket so its audio
   streams, and the Pocket keeps that recording.
-- **Teach OpenPocket your taps.** A 2-minute guided calibration: hold still,
+- **Teach Open Pocket your taps.** A 2-minute guided calibration: hold still,
   prompted taps, swipes, grip and rub (which must not count), then 6 taps per
   side. It trains the tap-location model on your grip, suggests a confidence
   threshold, and can keep the session (audio plus prompt timings) under
   `~/Library/Application Support/heypocket/calibration-sessions/` for
   improving the detector.
-- **Recordings** (the iPhone library through iCloud) is a placeholder. It needs
-  the app signed by the OpenPocket team (G6WL4CPNV3), which shares the iCloud
-  container `iCloud.com.nestorcodecrafters.openpocket`.
+- **Recordings (TestFlight build).** The iPhone library from iCloud Drive ›
+  Open Pocket (container `iCloud.com.nestorcodecrafters.openpocket`), read only:
+  recordings by day with the AI title (else the folder's title, else the time),
+  time and length, and for each its summary, transcript, notes and audio. It
+  follows the iPhone's layout (`src/lib/icloud/archive.ts`): a recording is the
+  audio checksum in `recording.json`, folders holding the same checksum are one
+  recording, the newest document of each kind wins, and anything invalid or in
+  conflict is skipped. New recordings appear while the app runs. Text downloads
+  from iCloud on its own; audio downloads when you press play and plays only
+  once its size and SHA-256 match. The Mac never creates, renames, moves or
+  deletes anything in the container. Nothing is read until Recordings first
+  opens. The Developer ID download has no iCloud container and says so.
 
 ## Build and run
 
 Needs only the Xcode Command Line Tools (Swift 6).
 
 ```sh
-mac/build-app.sh                 # → mac/build/OpenPocket.app, ad-hoc signed, Pocket Mic inside
-open mac/build/OpenPocket.app
+mac/build-app.sh                 # → "mac/build/Open Pocket.app", ad-hoc signed, Pocket Mic inside
+open "mac/build/Open Pocket.app"
 ```
 
 `SIGN_IDENTITY`, `UNIVERSAL=1` and `BUILD_NUMBER` change how it signs and
-builds, and `APP_STORE=1` makes the sandboxed TestFlight variant. `mac/release.sh`
-makes a Developer ID–signed, notarized zip and `mac/testflight.sh` uploads to
-TestFlight ([../docs/mac-release.md](../docs/mac-release.md)). The app icon is
+builds, and `APP_STORE=1` makes the sandboxed TestFlight variant (its iCloud
+entitlements need Apple's provisioning profile, so it only runs once installed
+from TestFlight). `mac/release.sh` makes a Developer ID–signed, notarized zip
+and `mac/testflight.sh` uploads to TestFlight
+([../docs/mac-release.md](../docs/mac-release.md)). The app icon is
 `Resources/AppIcon.icns`, made from the iPhone icon by
 `xcrun swift mac/make-icon.swift assets/images/icon.png mac/Resources/AppIcon.icns`.
 
@@ -63,10 +74,12 @@ fail, remove the app from the list and add it again.
 ## Checks without a Pocket
 
 ```sh
-mac/build/OpenPocket.app/Contents/MacOS/OpenPocket --loopback-test file.mp3       # audio path into Pocket Mic
-mac/build/OpenPocket.app/Contents/MacOS/OpenPocket --gesture-test <session dir>   # detector on a recorded session
-mac/build/OpenPocket.app/Contents/MacOS/OpenPocket --train-locations <session dir> out.json
-mac/build/OpenPocket.app/Contents/MacOS/OpenPocket --snapshot <dir>               # render every screen to PNG
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --loopback-test file.mp3       # audio path into Pocket Mic
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --gesture-test <session dir>   # detector on a recorded session
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --train-locations <session dir> out.json
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --snapshot <dir>               # render every screen to PNG
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --recordings-test <folder>     # parse a folder laid out like the container's Documents/; counts only
+"mac/build/Open Pocket.app/Contents/MacOS/OpenPocket" --recordings-folder <folder>   # run with Recordings reading that folder instead of iCloud
 ```
 
 The gesture detector is a port of the original Python prototype. On the two

@@ -53,7 +53,7 @@ export const AI_PROVIDERS: readonly AiProvider[] = [
   {
     id: 'openrouter', name: 'OpenRouter', model: 'openai/gpt-oss-120b',
     models: [{ id: 'openai/gpt-oss-120b', label: 'gpt-oss-120b', note: 'Low cost' }],
-    description: 'Many models with one account. OpenPocket only routes to providers with zero data retention.',
+    description: 'Many models with one account. Open Pocket only routes to providers with zero data retention.',
     billing: 'Billed to your OpenRouter credits.',
     apiKeyUrl: 'https://openrouter.ai/settings/keys', pricingUrl: 'https://openrouter.ai/models',
     privacyUrl: 'https://openrouter.ai/docs/guides/features/zdr',

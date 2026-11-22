@@ -103,23 +103,3 @@ struct Sidebar: View {
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 }
-
-struct RecordingsView: View {
-    var body: some View {
-        Page(maxWidth: 820) {
-            PageHeader(title: "Recordings",
-                       subtitle: "The same library as OpenPocket on your iPhone: recordings, transcripts, summaries and notes.")
-            Card(padding: 24) {
-                HStack(alignment: .top, spacing: 16) {
-                    Image(systemName: "icloud").font(.system(size: 26)).foregroundStyle(Palette.muted)
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Coming with the signed build").font(Typeface.serif(24)).foregroundStyle(Palette.ink)
-                        Text("Your library syncs through iCloud Drive › OpenPocket. Reading it needs this app signed by the OpenPocket team, which isn't set up on this Mac yet.")
-                            .font(.system(size: 14)).foregroundStyle(Palette.body).lineSpacing(3)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-            }
-        }
-    }
-}

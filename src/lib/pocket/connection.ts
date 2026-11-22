@@ -8,7 +8,7 @@ import type { DiagnosticLogger, PocketDevice } from './types';
 export function connectionError(error: unknown): PocketError {
   if (error instanceof PocketError) return error;
   const code = typeof error === 'object' && error !== null && 'errorCode' in error ? Number(error.errorCode) : null;
-  if (code === 101 || code === 601) return new PocketError('permission', 'Allow Bluetooth access for OpenPocket in iPhone Settings.');
+  if (code === 101 || code === 601) return new PocketError('permission', 'Allow Bluetooth access for Open Pocket in iPhone Settings.');
   if (code === 102) return new PocketError('unsupported', 'Bluetooth is unavailable. Use an iPhone development build.');
   if (code === 104) return new PocketError('bluetooth-off', 'Turn on Bluetooth in iPhone Settings and retry.');
   return new PocketError('bluetooth', 'Bluetooth operation failed. Wake Pocket, close the official app, and reconnect.');
@@ -50,7 +50,7 @@ export class PocketConnection {
     });
   }
   private checkState(state: State): void {
-    if (state === State.Unauthorized) throw new PocketError('permission', 'Allow Bluetooth access for OpenPocket in iPhone Settings.');
+    if (state === State.Unauthorized) throw new PocketError('permission', 'Allow Bluetooth access for Open Pocket in iPhone Settings.');
     if (state === State.PoweredOff) throw new PocketError('bluetooth-off', 'Turn on Bluetooth in iPhone Settings and retry.');
     if (state === State.Unsupported) throw new PocketError('unsupported', 'Bluetooth is unavailable. Use a physical iPhone development build.');
   }

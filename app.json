@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "OpenPocket",
+    "name": "Open Pocket",
     "slug": "openpocket",
     "version": "0.1.0",
     "orientation": "portrait",
@@ -11,10 +11,10 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.nestorcodecrafters.openpocket",
       "infoPlist": {
-        "NSBluetoothAlwaysUsageDescription": "OpenPocket uses Bluetooth to connect to your Pocket recorder and download your recordings.",
-        "NSLocalNetworkUsageDescription": "OpenPocket connects directly to your Pocket recorder to download recordings over Wi-Fi."
+        "NSBluetoothAlwaysUsageDescription": "Open Pocket uses Bluetooth to connect to your Pocket recorder and download your recordings.",
+        "NSLocalNetworkUsageDescription": "Open Pocket connects directly to your Pocket recorder to download recordings over Wi-Fi."
       },
-      "buildNumber": "5",
+      "buildNumber": "6",
       "config": {
         "usesNonExemptEncryption": false
       },

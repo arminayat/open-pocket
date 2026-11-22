@@ -60,7 +60,7 @@ export async function authorizeChatGPT(hostId: string, profile: ChatGPTProfile |
     return { clientId: callback.clientId, tokens, identity };
   } catch (error) {
     if (error instanceof ChatGPTError) throw error;
-    throw new ChatGPTError('ChatGPT sign-in could not complete. Use the latest OpenPocket iPhone build and try again.');
+    throw new ChatGPTError('ChatGPT sign-in could not complete. Use the latest Open Pocket iPhone build and try again.');
   } finally {
     if (request) { request.codeVerifier = undefined; request.url = null; }
     await PocketOAuthLoopback.stop().catch(() => {});

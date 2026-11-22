@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import Constants from 'expo-constants';
 import { Stack, useRouter } from 'expo-router';
 import { Button, ListGroup, Separator, Switch } from 'heroui-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,7 +27,7 @@ function AutoDownloadRow() {
           <SheetLead>New recordings save to this iPhone on their own.</SheetLead>
           <View className="gap-3 pt-1">
             <SheetPoint icon="bluetooth">Over Bluetooth while Pocket is nearby, so you stay on Wi-Fi.</SheetPoint>
-            <SheetPoint icon="moon-outline">Keeps going while OpenPocket is in the background.</SheetPoint>
+            <SheetPoint icon="moon-outline">Keeps going while Open Pocket is in the background.</SheetPoint>
             <SheetPoint icon="refresh">Anything that fails retries the next time Pocket connects.</SheetPoint>
           </View>
         </LearnMore>
@@ -36,6 +37,11 @@ function AutoDownloadRow() {
     </ListGroup.Item>
   );
 }
+
+const version = Constants.expoConfig?.version ?? '0.1.0';
+const build = Constants.expoConfig?.ios?.buildNumber;
+/** Shown under the last section, like the Mac app's Settings footer. */
+const ABOUT = `Open Pocket ${version}${build ? ` (${build})` : ''} · unofficial, not affiliated with the maker of Pocket`;
 
 /** Diagnostics live on their own page, reached from the bottom of Settings. */
 function DebugRow() {
@@ -76,7 +82,7 @@ export default function SettingsScreen() {
           <AiRow />
         </ListGroup>
       </Section>
-      <Section title="Troubleshooting">
+      <Section title="Troubleshooting" footer={ABOUT}>
         <ListGroup>
           <DebugRow />
         </ListGroup>

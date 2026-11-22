@@ -17,7 +17,7 @@ struct SetupView: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 step(0, "Your Pocket's key", detail: model.key.map { "In this Mac's Keychain (\(Keystore.masked($0)))." }) {
-                    Text("A Pocket accepts one key. Paste the one from your other Mac (pocket key export) or from OpenPocket on iPhone.")
+                    Text("A Pocket accepts one key. Paste the one from your other Mac (pocket key export) or from Open Pocket on iPhone.")
                     HStack(spacing: 10) {
                         SecureField("Key", text: $keyText.value)
                             .textFieldStyle(.plain).font(.system(size: 14))
@@ -45,8 +45,8 @@ struct SetupView: View {
                         .buttonStyle(PrimaryButtonStyle()).disabled(model.installing)
                     if let e = model.installError { Text(e).foregroundStyle(Palette.warn) }
                 }
-                step(3, "Allow Accessibility", detail: "Allowed. OpenPocket can press your dictation app's hotkey.") {
-                    Text("OpenPocket presses your dictation app's hotkey for you, which macOS only allows with Accessibility. Turn on OpenPocket in the list that opens.")
+                step(3, "Allow Accessibility", detail: "Allowed. Open Pocket can press your dictation app's hotkey.") {
+                    Text("Open Pocket presses your dictation app's hotkey for you, which macOS only allows with Accessibility. Turn on Open Pocket in the list that opens.")
                     Button("Open System Settings") { Hotkey.openAccessibilitySettings() }
                         .buttonStyle(PrimaryButtonStyle())
                 }
@@ -61,11 +61,15 @@ struct SetupView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("OPTIONAL").font(.system(size: 12, weight: .semibold)).tracking(0.6).foregroundStyle(Palette.muted)
                         Text("Recordings from your iPhone").font(.system(size: 15, weight: .semibold)).foregroundStyle(Palette.ink)
-                        Text("Turn on iCloud sync to see OpenPocket's recordings, transcripts and notes here too.")
+                        Text("Turn on iCloud sync in Open Pocket on your iPhone to see its recordings, transcripts and notes here too.")
                             .font(.system(size: 13)).foregroundStyle(Palette.muted)
                     }
                     Spacer()
-                    Text("Needs the signed build").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.faint)
+                    if model.recordings.available {
+                        Button("Open Recordings") { model.pane = .recordings }.buttonStyle(SecondaryButtonStyle(compact: true))
+                    } else {
+                        Text("TestFlight build only").font(.system(size: 13, weight: .semibold)).foregroundStyle(Palette.faint)
+                    }
                 }
             }
         }
@@ -141,7 +145,7 @@ struct DictationAppSettings: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 10) { DictationAppMenu(); ShortcutRecorder(shortcut: shortcut) }
             Segmented(selection: style, options: HotkeyStyle.allCases.map { ($0, $0.label) })
-            Text("Set the app's microphone to System default. OpenPocket swaps in Pocket Mic while you talk.")
+            Text("Set the app's microphone to System default. Open Pocket swaps in Pocket Mic while you talk.")
                 .font(.system(size: 13)).foregroundStyle(Palette.muted)
         }
     }

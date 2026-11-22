@@ -58,12 +58,12 @@ function AutoTranscribe({ provider }: { provider: TranscriptionProvider }) {
     if (!enabled) { void transcription.setAutoTranscribe(false); return; }
     const count = untranscribed(library, transcription.entries).length;
     Alert.alert(`Transcribe automatically with ${provider.name}?`,
-      `OpenPocket will upload each saved recording without a transcript to ${provider.name}, one at a time while the app is open, and your API account is billed for each. ${count === 1 ? '1 recording is' : `${count} recordings are`} waiting now. Recordings imported from iCloud are skipped. Failed transcriptions are not retried automatically.`,
+      `Open Pocket will upload each saved recording without a transcript to ${provider.name}, one at a time while the app is open, and your API account is billed for each. ${count === 1 ? '1 recording is' : `${count} recordings are`} waiting now. Recordings imported from iCloud are skipped. Failed transcriptions are not retried automatically.`,
       [{ text: 'Cancel', style: 'cancel' }, { text: 'Turn on', onPress: () => void transcription.setAutoTranscribe(true) }]);
   };
   const status = !saved ? `Save a ${provider.name} API key first.`
-    : transcription.autoPaused ? 'Paused after a failed transcription. It continues with the next recording when you reopen OpenPocket.'
-    : transcription.autoTranscribe ? 'Recordings without a transcript are transcribed while OpenPocket is open.' : undefined;
+    : transcription.autoPaused ? 'Paused after a failed transcription. It continues with the next recording when you reopen Open Pocket.'
+    : transcription.autoTranscribe ? 'Recordings without a transcript are transcribed while Open Pocket is open.' : undefined;
   return (
     <Section title="Automatic" footer={status}>
       <Card><Card.Body className="flex-row items-center gap-4">
