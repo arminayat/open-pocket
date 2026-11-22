@@ -1,6 +1,6 @@
 #!/bin/bash
 # Builds the sandboxed TestFlight variant of Open Pocket for Mac (Apple silicon and Intel) and
-# uploads it to App Store Connect, to the same app as the iPhone version ("Open Pocket",
+# uploads it to App Store Connect, to the same app as the iPhone version ("Open Pocket Beta",
 # bundle ID com.nestorcodecrafters.openpocket). Xcode signs it for the App Store and uploads it with
 # the account it's signed in to, making the certificates and profile it needs itself.
 # docs/mac-release.md has the rest; the notarized download with every feature is release.sh.
